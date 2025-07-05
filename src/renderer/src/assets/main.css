@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+
+@theme {
+    --color-font-black: #1f2937;
+    --color-font-: #4b5563;
+    --color-font-gray: #9ca3af;
+    --color-bg-gray: #f3f4f6;
+    --color-main-color: #a4bdfc;
+    --shadow-all: 0 0 12px 2px #a4bdfc;
+}
+
+div {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+html,
+body {
+    overflow: hidden !important;
+    height: 100%;
+    background: transparent;
+}
