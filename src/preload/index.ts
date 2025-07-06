@@ -8,7 +8,9 @@ const api = {
     onGoogleOauthError: (callback) => ipcRenderer.on('google-oauth-error', (_event, ...args) => callback(...args)),
     tryAutoLogin: () => ipcRenderer.invoke('try-auto-login'),
     logoutGoogleOAuth: () => ipcRenderer.invoke('logout-google-oauth'),
-    requestFocus: () => ipcRenderer.send('focus-window'),
+    safeReload: () => ipcRenderer.send('safe-reload'),
+    startDragging: () => ipcRenderer.send('start-dragging'),
+    stopDragging: () => ipcRenderer.send('stop-dragging'),
     removeListeners: () => {
         ipcRenderer.removeAllListeners('google-oauth-token')
         ipcRenderer.removeAllListeners('google-oauth-error')

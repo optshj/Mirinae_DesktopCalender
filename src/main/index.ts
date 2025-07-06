@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { attach, detach } from 'electron-as-wallpaper'
 import icon from '../../resources/icon.png?asset'
 import http from 'http'
 import crypto from 'crypto'
@@ -30,7 +31,6 @@ function createWindow(): void {
         y: mainWindowState.y,
         width: mainWindowState.width,
         height: mainWindowState.height,
-        resizable: false,
         show: false,
         frame: false,
         transparent: true,
@@ -42,12 +42,30 @@ function createWindow(): void {
             sandbox: false
         }
     })
-    mainWindow.on('ready-to-show', () => {
-        mainWindow!.show()
+    mainWindow.setMenu(null)
+    mainWindowState.manage(mainWindow)
+
+    ipcMain.on('safe-reload', () => {
+        detach(mainWindow!)
+        mainWindow!.webContents.reload()
     })
-    mainWindow.webContents.setWindowOpenHandler((details) => {
-        shell.openExternal(details.url)
-        return { action: 'deny' }
+    ipcMain.on('start-dragging', () => {
+        detach(mainWindow!)
+    })
+
+    ipcMain.on('stop-dragging', () => {
+        attach(mainWindow!, {
+            forwardKeyboardInput: true,
+            forwardMouseInput: true
+        })
+    })
+
+    mainWindow.on('ready-to-show', () => {
+        attach(mainWindow!, {
+            forwardKeyboardInput: true,
+            forwardMouseInput: true
+        })
+        mainWindow!.show()
     })
 
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {

@@ -3,12 +3,17 @@ import { useEffect, useState } from 'react'
 declare global {
     interface Window {
         api: {
-            onGoogleOauthSuccess: (callback: (tokens: any) => void) => void
+            startGoogleOauth: () => void
+            onGoogleOauthSuccess: (callback: (token: any) => void) => void
             onGoogleOauthError: (callback: (error: any) => void) => void
             removeListeners: () => void
-            startGoogleOauth: () => void
             tryAutoLogin?: () => Promise<any>
             logoutGoogleOAuth?: () => Promise<void>
+            mouseEnter: () => void
+            mouseLeave: () => void
+            safeReload: () => void
+            startDragging: () => void
+            stopDragging: () => void
         }
     }
 }
