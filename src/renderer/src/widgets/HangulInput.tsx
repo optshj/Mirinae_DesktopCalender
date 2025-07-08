@@ -17,19 +17,16 @@ export default function HangulInput({ value, onChange, ...props }: HangulInputPr
     }, [props.autoFocus])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        // 1. 한/영 모드 전환
         if (e.key === 'HangulMode' || (e.shiftKey && e.code === 'Space')) {
             e.preventDefault()
             setInputMode((prev) => (prev === 'ko' ? 'en' : 'ko'))
             return
         }
 
-        // 2. 단축키 및 기능 키 무시
         if (e.ctrlKey || e.altKey || e.metaKey) {
             return
         }
 
-        // 3. Backspace 처리
         if (e.key === 'Backspace') {
             e.preventDefault()
             let newValue = ''
@@ -43,7 +40,6 @@ export default function HangulInput({ value, onChange, ...props }: HangulInputPr
             return
         }
 
-        // 4. 입력 가능한 단일 문자 처리
         if (e.key.length === 1) {
             e.preventDefault()
             let newValue = value
@@ -64,5 +60,15 @@ export default function HangulInput({ value, onChange, ...props }: HangulInputPr
         onChange(value + pastedText)
     }
 
-    return <input ref={inputRef} {...props} value={value} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={() => {}} autoComplete="off" />
+    return (
+        <div className="relative flex w-full items-center">
+            <input ref={inputRef} {...props} value={value} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={() => {}} autoComplete="off" />
+            <div
+                className={`absolute right-3 text-sm font-bold transition-colors select-none ${inputMode === 'ko' ? 'text-main-color' : 'text-zinc-400'}`}
+                style={{ pointerEvents: 'none' }}
+            >
+                {inputMode === 'ko' ? '한' : '영'}
+            </div>
+        </div>
+    )
 }

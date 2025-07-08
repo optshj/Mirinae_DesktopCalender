@@ -11,6 +11,7 @@ export default function Modal({ children, onClose }) {
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [onClose])
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={onClose}>
             <div className="relative min-w-[300px] rounded-xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>

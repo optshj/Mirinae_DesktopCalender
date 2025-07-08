@@ -8,14 +8,17 @@ import Footer from '@/entities/Footer'
 
 export default function Calendar() {
     const { tokens } = useLogin()
-    const { items: event } = useGoogleCalendar(tokens.access_token)
+    const { items: event, refresh } = useGoogleCalendar(tokens.access_token)
     const { days, month, displayMonth, year, handlePrevMonth, handleNextMonth } = useDate()
+    const onSuccess = async () => {
+        await refresh()
+    }
 
     return (
         <div className="flex flex-col items-center">
             <div className="w-full max-w-7xl">
                 <CalendarHeader displayMonth={displayMonth} year={year} handleNextMonth={handleNextMonth} handlePrevMonth={handlePrevMonth} />
-                <CalendarGrid days={days} month={month} items={event} />
+                <CalendarGrid days={days} month={month} items={event} onSuccess={onSuccess} />
                 <Footer todayEvents={event} quickLinks={[]} />
             </div>
         </div>

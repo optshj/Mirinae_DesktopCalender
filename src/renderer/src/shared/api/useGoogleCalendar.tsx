@@ -51,10 +51,33 @@ export function useEditEvent(access_token: string) {
     const [error, setError] = useState<Error | null>(null)
 
     const addEvent = useCallback(
-        async (start: Date, end: Date, summary: string) => {
-            console.log('Adding event:', { start, end, summary })
+        async (date: Date, summary: string) => {
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+            const year = date.getFullYear()
+            const month = date.getMonth() + 1
+            const day = date.getDate()
+
+            const monthStr = String(month).padStart(2, '0')
+            const dayStr = String(day).padStart(2, '0')
+
+            const localDateString = `${year}-${monthStr}-${dayStr}`
+
+            const startTime = new Date(`${localDateString}T09:00`)
+            const endTime = new Date(`${localDateString}T09:00`)
+            const eventData = {
+                summary: summary,
+                start: {
+                    dateTime: startTime.toISOString(),
+                    timeZone: timeZone
+                },
+                end: {
+                    dateTime: endTime.toISOString(),
+                    timeZone: timeZone
+                }
+            }
             setLoading(true)
             setError(null)
+
             try {
                 const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
                     method: 'POST',
@@ -62,9 +85,13 @@ export function useEditEvent(access_token: string) {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${access_token}`
                     },
-                    body: JSON.stringify({ start, end, summary })
+                    body: JSON.stringify(eventData)
                 })
-                if (!response.ok) throw new Error('Failed to update event')
+
+                if (!response.ok) {
+                    throw new Error('Failed to add event')
+                }
+
                 return await response.json()
             } catch (err: any) {
                 setError(err)
@@ -74,6 +101,7 @@ export function useEditEvent(access_token: string) {
         },
         [access_token]
     )
+
     const deleteEvent = useCallback(
         async (eventId: string) => {
             setLoading(true)
