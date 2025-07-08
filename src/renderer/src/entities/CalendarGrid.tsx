@@ -5,6 +5,7 @@ import { EventItemWithColor } from '@/shared/types/google'
 import Modal from '@/widgets/Modal'
 import { useEditEvent } from '@/shared/api/useGoogleCalendar'
 import { useLogin } from '@/shared/api/useLogin'
+import HangulInput from '@/widgets/HangulInput'
 
 interface CalendarGridProps {
     days: Date[]
@@ -141,13 +142,13 @@ function DayEventList({ date, items }: { date: Date; items: EventItemWithColor[]
                         <label className="text-main-color mb-1 text-xs font-semibold" htmlFor="summary">
                             일정 제목
                         </label>
-                        <input
+                        <HangulInput
                             id="summary"
                             className="focus:ring-main-color rounded-lg border border-zinc-300 px-3 py-2 transition focus:ring-2 focus:outline-none"
                             type="text"
-                            placeholder="예: 회의, 약속, 할 일"
+                            placeholder="예: 회의, 약속"
                             value={summary}
-                            onChange={(e) => setSummary(e.target.value)}
+                            onChange={(newSummary) => setSummary(newSummary)}
                             required
                             autoFocus
                         />

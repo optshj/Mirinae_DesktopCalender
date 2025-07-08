@@ -1,0 +1,42 @@
+const KOREAN_KEYMAP = {
+    // 자음 (Consonants)
+    r: 'ㄱ',
+    R: 'ㄲ',
+    s: 'ㄴ',
+    e: 'ㄷ',
+    E: 'ㄸ',
+    f: 'ㄹ',
+    a: 'ㅁ',
+    q: 'ㅂ',
+    Q: 'ㅃ',
+    t: 'ㅅ',
+    T: 'ㅆ',
+    d: 'ㅇ',
+    w: 'ㅈ',
+    W: 'ㅉ',
+    c: 'ㅊ',
+    z: 'ㅋ',
+    x: 'ㅌ',
+    v: 'ㅍ',
+    g: 'ㅎ',
+
+    // 모음 (Vowels)
+    k: 'ㅏ',
+    o: 'ㅐ',
+    O: 'ㅒ',
+    i: 'ㅑ',
+    j: 'ㅓ',
+    p: 'ㅔ',
+    P: 'ㅖ',
+    u: 'ㅕ',
+    h: 'ㅗ',
+    y: 'ㅛ',
+    n: 'ㅜ',
+    b: 'ㅠ',
+    m: 'ㅡ',
+    l: 'ㅣ'
+}
+
+export function convertEngToKor(key: string): string {
+    return KOREAN_KEYMAP[key] || key
+}
