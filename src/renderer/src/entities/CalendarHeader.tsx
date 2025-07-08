@@ -5,7 +5,7 @@ import { IoMdMore } from 'react-icons/io'
 import { MdOutlineRefresh } from 'react-icons/md'
 import { LuFoldVertical } from 'react-icons/lu'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DropDown from '@/widgets/DropDown'
 
 interface CalendarHeaderProps {
@@ -17,6 +17,20 @@ interface CalendarHeaderProps {
 export default function CalendarHeader({ displayMonth, year, handlePrevMonth, handleNextMonth }: CalendarHeaderProps) {
     const { login, logout, tokens } = useLogin()
     const [isDrag, setIsDrag] = useState(false)
+    const [opacity, setOpacity] = useState(1.0)
+
+    const handleOpacityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newOpacity = parseFloat(e.target.value)
+        setOpacity(newOpacity)
+        window.api.setOpacity(newOpacity)
+    }
+    useEffect(() => {
+        async function fetchOpacity() {
+            const initialOpacity = await window.api.getInitialOpacity()
+            setOpacity(initialOpacity)
+        }
+        fetchOpacity()
+    }, [])
 
     return (
         <div className="border-bg-gray mb-2 flex w-full flex-row items-center justify-between rounded-xl border bg-white px-6 py-3">
@@ -66,7 +80,26 @@ export default function CalendarHeader({ displayMonth, year, handlePrevMonth, ha
                             위치수정 시작
                         </div>
                     )}
-                    <div className="cursor-pointer rounded px-2 py-1">투명도</div>
+                    <div className="rounded px-2 py-1">
+                        <label htmlFor="opacity-slider">투명도 조절</label>
+                        <div className="flex items-center gap-2">
+                            <input
+                                id="opacity-slider"
+                                type="range"
+                                min="0.2"
+                                max="1.0"
+                                step="0.05"
+                                value={opacity}
+                                onChange={handleOpacityChange}
+                                className="w-full"
+                            />
+                            <span className="text-xs font-semibold">{Math.round(opacity * 100)}%</span>
+                        </div>
+                    </div>
+
+                    <div onClick={() => window.api.quitApp()} className="cursor-pointer rounded px-2 py-1 text-red-600 hover:bg-red-50">
+                        앱 종료
+                    </div>
                 </DropDown>
             </div>
         </div>

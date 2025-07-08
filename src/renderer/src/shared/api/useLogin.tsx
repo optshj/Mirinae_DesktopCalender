@@ -14,6 +14,9 @@ declare global {
             safeReload: () => void
             startDragging: () => void
             stopDragging: () => void
+            quitApp: () => void
+            setOpacity: (opacity: number) => void
+            getInitialOpacity: () => number
         }
     }
 }

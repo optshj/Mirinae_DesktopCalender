@@ -11,6 +11,9 @@ const api = {
     safeReload: () => ipcRenderer.send('safe-reload'),
     startDragging: () => ipcRenderer.send('start-dragging'),
     stopDragging: () => ipcRenderer.send('stop-dragging'),
+    quitApp: () => ipcRenderer.send('quit-app'),
+    setOpacity: (opacity) => ipcRenderer.send('set-opacity', opacity),
+    getInitialOpacity: () => ipcRenderer.invoke('get-initial-opacity'),
     removeListeners: () => {
         ipcRenderer.removeAllListeners('google-oauth-token')
         ipcRenderer.removeAllListeners('google-oauth-error')

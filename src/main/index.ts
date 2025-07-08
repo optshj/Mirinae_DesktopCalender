@@ -1,5 +1,4 @@
 import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
-import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { attach, detach } from 'electron-as-wallpaper'
@@ -7,8 +6,9 @@ import icon from '../../resources/icon.png?asset'
 import http from 'http'
 import crypto from 'crypto'
 import keytar from 'keytar'
+const Store = require('electron-store')
 
-const SERVICE_NAME = 'my-electron-google-calendar-app'
+const SERVICE_NAME = 'mirinae'
 const ACCOUNT_NAME = 'google-refresh-token'
 
 const CLIENT_ID = process.env.VITE_CLIENT_ID
@@ -21,16 +21,28 @@ let mainWindow: BrowserWindow | null = null
 
 function createWindow(): void {
     const { height: screenHeight } = screen.getPrimaryDisplay().workAreaSize
-    let mainWindowState = windowStateKeeper({
-        defaultWidth: 1280,
-        defaultHeight: screenHeight
+    const store = new Store.default({
+        defaults: {
+            'window-bounds': {
+                width: 1280,
+                height: screenHeight,
+                x: undefined,
+                y: undefined
+            },
+            'window-opacity': 1.0
+        }
     })
-
+    const savedBounds = store.get('window-bounds', {
+        width: 1280,
+        height: screenHeight,
+        x: undefined,
+        y: undefined
+    })
     mainWindow = new BrowserWindow({
-        x: mainWindowState.x,
-        y: mainWindowState.y,
-        width: mainWindowState.width,
-        height: mainWindowState.height,
+        x: savedBounds.x,
+        y: savedBounds.y,
+        width: savedBounds.width,
+        height: screenHeight,
         show: false,
         frame: false,
         transparent: true,
@@ -43,23 +55,19 @@ function createWindow(): void {
         }
     })
     mainWindow.setMenu(null)
-    mainWindowState.manage(mainWindow)
 
-    ipcMain.on('safe-reload', () => {
-        detach(mainWindow!)
-        mainWindow!.webContents.reload()
+    mainWindow.on('resize', () => {
+        if (mainWindow) {
+            const { width, height, x, y } = mainWindow.getBounds()
+            store.set('window-bounds', { width, height, x, y })
+        }
     })
-    ipcMain.on('start-dragging', () => {
-        detach(mainWindow!)
+    mainWindow.on('move', () => {
+        if (mainWindow) {
+            const { width, height, x, y } = mainWindow.getBounds()
+            store.set('window-bounds', { width, height, x, y })
+        }
     })
-
-    ipcMain.on('stop-dragging', () => {
-        attach(mainWindow!, {
-            forwardKeyboardInput: true,
-            forwardMouseInput: true
-        })
-    })
-
     mainWindow.on('ready-to-show', () => {
         attach(mainWindow!, {
             forwardKeyboardInput: true,
@@ -67,7 +75,16 @@ function createWindow(): void {
         })
         mainWindow!.show()
     })
+    ipcMain.on('set-opacity', (_, newOpacity) => {
+        if (mainWindow) {
+            mainWindow.setOpacity(newOpacity)
+            store.set('window-opacity', newOpacity)
+        }
+    })
 
+    ipcMain.handle('get-initial-opacity', () => {
+        return store.get('window-opacity', 1.0)
+    })
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
         mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
     } else {
@@ -216,6 +233,25 @@ ipcMain.on('start-google-oauth', async (event) => {
         console.error('OAuth Error:', error)
         event.sender.send('google-oauth-error')
     }
+})
+ipcMain.on('quit-app', () => {
+    app.quit()
+})
+ipcMain.on('safe-reload', () => {
+    if (mainWindow) {
+        detach(mainWindow)
+        mainWindow.webContents.reload()
+    }
+})
+ipcMain.on('start-dragging', () => {
+    detach(mainWindow!)
+})
+
+ipcMain.on('stop-dragging', () => {
+    attach(mainWindow!, {
+        forwardKeyboardInput: true,
+        forwardMouseInput: true
+    })
 })
 
 app.whenReady().then(() => {
