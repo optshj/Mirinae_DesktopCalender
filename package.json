@@ -1,9 +1,9 @@
 {
-    "name": "coglecalendar",
+    "name": "mirinae",
     "version": "1.0.0",
-    "description": "An Electron application with React and TypeScript",
+    "description": "미리내 | 당신의 하루를 별처럼 빛나게",
     "main": "./out/main/index.js",
-    "author": "example.com",
+    "author": "Mirinae",
     "homepage": "https://electron-vite.org",
     "scripts": {
         "format": "prettier --write .",
@@ -19,6 +19,25 @@
         "build:win": "npm run build && electron-builder --win",
         "build:mac": "electron-vite build && electron-builder --mac",
         "build:linux": "electron-vite build && electron-builder --linux"
+    },
+    "build": {
+        "appId": "com.mirinae",
+        "productName": "미리내",
+        "files": [
+            "out/",
+            "package.json"
+        ],
+        "directories": {
+            "output": "release"
+        },
+        "win": {
+            "target": "nsis",
+            "icon": "resources/icon.png"
+        },
+        "mac": {
+            "target": "dmg",
+            "icon": "resources/icon.png"
+        }
     },
     "dependencies": {
         "@electron-toolkit/preload": "^3.0.1",
