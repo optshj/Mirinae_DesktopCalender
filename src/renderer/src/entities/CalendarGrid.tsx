@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { isSameDay } from '@/shared/lib/dateFunction'
-import { EventItemWithColor } from '@/shared/types/google'
+import { ColorType, EventItemWithColor } from '@/shared/types/google'
 
 import ScheduleModal from './ScheduleModal'
 
@@ -8,9 +8,10 @@ interface CalendarGridProps {
     days: Date[]
     month: number
     items: EventItemWithColor[] | null
+    colors: ColorType | null
     onSuccess: () => Promise<void>
 }
-export default function CalendarGrid({ days, month, items, onSuccess }: CalendarGridProps) {
+export default function CalendarGrid({ days, month, items, onSuccess, colors }: CalendarGridProps) {
     const [modalOpen, setModalOpen] = useState(false)
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
@@ -56,7 +57,7 @@ export default function CalendarGrid({ days, month, items, onSuccess }: Calendar
                 </div>
             </div>
 
-            {modalOpen && selectedDate && <ScheduleModal onClose={closeModal} date={selectedDate} items={items} onSuccess={onSuccess} />}
+            {modalOpen && selectedDate && <ScheduleModal onClose={closeModal} date={selectedDate} items={items} colors={colors} onSuccess={onSuccess} />}
         </>
     )
 }
@@ -77,7 +78,7 @@ function EventList({ items, date }: { items: EventItemWithColor[] | null; date: 
                     style={{
                         background: event.color.background
                     }}
-                    className={`mx-2 mt-1 flex items-center overflow-hidden rounded-lg px-2 py-1 text-start text-sm text-white`}
+                    className="mx-2 mt-1 flex items-center overflow-hidden rounded-lg px-2 py-1 text-start text-sm text-white"
                 >
                     {event.summary}
                 </div>

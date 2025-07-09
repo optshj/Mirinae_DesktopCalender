@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, screen, Tray, Menu } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { attach, detach } from 'electron-as-wallpaper'
@@ -18,26 +18,22 @@ const SCOPES = 'https://www.googleapis.com/auth/calendar'
 
 let authServer: http.Server | null = null
 let mainWindow: BrowserWindow | null = null
+let tray: Tray | null = null
+const store = new Store.default({
+    'window-bounds': {
+        width: 1280,
+        height: 800,
+        x: undefined,
+        y: undefined
+    },
+    'window-opacity': 1.0
+})
 
 function createWindow(): void {
     const { height: screenHeight } = screen.getPrimaryDisplay().workAreaSize
-    const store = new Store.default({
-        defaults: {
-            'window-bounds': {
-                width: 1280,
-                height: screenHeight,
-                x: undefined,
-                y: undefined
-            },
-            'window-opacity': 1.0
-        }
-    })
-    const savedBounds = store.get('window-bounds', {
-        width: 1280,
-        height: screenHeight,
-        x: undefined,
-        y: undefined
-    })
+    const savedBounds = store.get('window-bounds')
+    const savedOpacity = store.get('window-opacity')
+
     mainWindow = new BrowserWindow({
         x: savedBounds.x,
         y: savedBounds.y,
@@ -48,43 +44,22 @@ function createWindow(): void {
         transparent: true,
         skipTaskbar: true,
         type: 'toolbar',
-        ...(process.platform === 'linux' ? { icon } : {}),
         webPreferences: {
             preload: join(__dirname, '../preload/index.js'),
             sandbox: false
         }
     })
-    mainWindow.setMenu(null)
 
-    mainWindow.on('resize', () => {
-        if (mainWindow) {
-            const { width, height, x, y } = mainWindow.getBounds()
-            store.set('window-bounds', { width, height, x, y })
-        }
-    })
-    mainWindow.on('move', () => {
-        if (mainWindow) {
-            const { width, height, x, y } = mainWindow.getBounds()
-            store.set('window-bounds', { width, height, x, y })
-        }
-    })
     mainWindow.on('ready-to-show', () => {
         attach(mainWindow!, {
             forwardKeyboardInput: true,
             forwardMouseInput: true
         })
+        mainWindow!.setOpacity(savedOpacity)
+        mainWindow!.setMenu(null)
         mainWindow!.show()
     })
-    ipcMain.on('set-opacity', (_, newOpacity) => {
-        if (mainWindow) {
-            mainWindow.setOpacity(newOpacity)
-            store.set('window-opacity', newOpacity)
-        }
-    })
 
-    ipcMain.handle('get-initial-opacity', () => {
-        return store.get('window-opacity', 1.0)
-    })
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
         mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
     } else {
@@ -135,11 +110,7 @@ const fetchAccessTokens = async (code: string, codeVerifier: string) => {
             body: params
         })
 
-        if (!response.ok) {
-            const errorText = await response.text()
-            console.error('Error fetching tokens:', response.status, response.statusText, errorText)
-            throw new Error(`Failed to fetch tokens with status: ${response.status}`)
-        }
+        if (!response.ok) throw new Error(`Failed to fetch tokens with status: `)
 
         const data = await response.json()
         return data // { access_token, refresh_token, ... }
@@ -165,16 +136,11 @@ const refreshAccessToken = async (refresh_token: string) => {
             body: params
         })
 
-        if (!response.ok) {
-            const errorText = await response.text()
-            console.error('Error refreshing access token:', response.status, response.statusText, errorText)
-            throw new Error(`Failed to refresh access token with status: ${response.status}`)
-        }
+        if (!response.ok) throw new Error(`Failed to refresh access token`)
 
         const data = await response.json()
         return data // { access_token, ... }
     } catch (error) {
-        console.error('Error refreshing access token:', error)
         throw new Error('Failed to refresh access token')
     }
 }
@@ -238,22 +204,27 @@ ipcMain.on('quit-app', () => {
     app.quit()
 })
 ipcMain.on('safe-reload', () => {
-    if (mainWindow) {
-        detach(mainWindow)
-        mainWindow.webContents.reload()
-    }
+    detach(mainWindow!)
+    mainWindow!.webContents.reload()
 })
 ipcMain.on('start-dragging', () => {
     detach(mainWindow!)
 })
-
 ipcMain.on('stop-dragging', () => {
     attach(mainWindow!, {
         forwardKeyboardInput: true,
         forwardMouseInput: true
     })
+    const { width, height, x, y } = mainWindow!.getBounds()
+    store.set('window-bounds', { width, height, x, y })
 })
-
+ipcMain.on('set-opacity', (_, newOpacity) => {
+    mainWindow!.setOpacity(newOpacity)
+    store.set('window-opacity', newOpacity)
+})
+ipcMain.handle('get-initial-opacity', () => {
+    return store.get('window-opacity')
+})
 app.whenReady().then(() => {
     electronApp.setAppUserModelId('com.electron')
     app.on('browser-window-created', (_, window) => {
@@ -261,6 +232,24 @@ app.whenReady().then(() => {
     })
 
     createWindow()
+    tray = new Tray(icon)
+
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: '열기',
+            click: (): void => {
+                mainWindow?.show()
+            }
+        },
+        {
+            label: '종료',
+            click: (): void => {
+                app.quit()
+            }
+        }
+    ])
+    tray.setToolTip('미리내')
+    tray.setContextMenu(contextMenu)
 
     app.on('activate', function () {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()

@@ -5,8 +5,9 @@ import { convertEngToKor } from '@/shared/lib/en2kr'
 interface HangulInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
     value: string
     onChange: (newValue: string) => void
+    color: string
 }
-export default function HangulInput({ value, onChange, ...props }: HangulInputProps) {
+export default function HangulInput({ value, onChange, color, ...props }: HangulInputProps) {
     const [inputMode, setInputMode] = useState<'ko' | 'en'>('ko')
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -64,8 +65,8 @@ export default function HangulInput({ value, onChange, ...props }: HangulInputPr
         <div className="relative flex w-full items-center">
             <input ref={inputRef} {...props} value={value} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={() => {}} autoComplete="off" />
             <div
-                className={`absolute right-3 text-sm font-bold transition-colors select-none ${inputMode === 'ko' ? 'text-main-color' : 'text-zinc-400'}`}
-                style={{ pointerEvents: 'none' }}
+                className={`absolute right-3 text-sm font-bold transition-colors select-none ${inputMode === 'ko' ? '' : 'text-zinc-400'}`}
+                style={{ pointerEvents: 'none', color: color }}
             >
                 {inputMode === 'ko' ? '한' : '영'}
             </div>

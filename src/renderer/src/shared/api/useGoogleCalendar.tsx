@@ -51,7 +51,7 @@ export function useEditEvent(access_token: string) {
     const [error, setError] = useState<Error | null>(null)
 
     const addEvent = useCallback(
-        async (date: Date, summary: string) => {
+        async (date: Date, summary: string, colorId: string) => {
             const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
             const year = date.getFullYear()
             const month = date.getMonth() + 1
@@ -73,7 +73,8 @@ export function useEditEvent(access_token: string) {
                 end: {
                     dateTime: endTime.toISOString(),
                     timeZone: timeZone
-                }
+                },
+                colorId: colorId || '1'
             }
             setLoading(true)
             setError(null)
