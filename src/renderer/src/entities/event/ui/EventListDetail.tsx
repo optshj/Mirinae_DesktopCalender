@@ -13,7 +13,11 @@ export default function EventListDetail({ items, date, onSuccess }: EventListDet
     return (
         <>
             {events.map((event) => (
-                <div key={event.id} className="mb-2 flex items-center justify-between rounded-xl p-3 text-white" style={{ background: event.color.background }}>
+                <div
+                    key={event.id}
+                    className="text-depend mb-2 flex items-center justify-between rounded-xl p-3"
+                    style={{ background: event.color.background }}
+                >
                     <div className="flex-1">
                         <span className="font-semibold">{event.summary}</span>
                         <div className="mt-1 text-xs">

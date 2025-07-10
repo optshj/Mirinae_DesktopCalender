@@ -30,11 +30,7 @@ export default function DropDown({ trigger, children, align = 'left' }: DropDown
                 {trigger}
             </div>
             {open && (
-                <div
-                    className={`absolute z-50 mt-2 min-w-[160px] rounded-xl bg-white shadow-lg border border-gray-200 p-2 ${
-                        align === 'right' ? 'right-0' : 'left-0'
-                    }`}
-                >
+                <div className={`bg-primary absolute z-50 mt-2 min-w-[160px] rounded-xl p-2 shadow-lg ${align === 'right' ? 'right-0' : 'left-0'}`}>
                     {children}
                 </div>
             )}

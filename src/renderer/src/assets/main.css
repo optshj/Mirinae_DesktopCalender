@@ -9,6 +9,58 @@
     --shadow-all: 0 0 12px 2px #a4bdfc;
 }
 
+@layer base {
+    :root {
+        --color-background-primary: #f9fafb;
+        --color-text-primary: #111827;
+        --color-text-secondary: #6b7280;
+        --color-text-depend: #f3f4f6;
+        --color-accent: #6366f1;
+        --shadow-accent: 0 0 10px 1px #6366f1;
+        --color-border-primary: #f3f4f6;
+        --color-layer-background: #ffffff;
+    }
+
+    html.dark {
+        --color-background-primary: #303033;
+        --color-text-primary: #f3f4f6;
+        --color-text-secondary: #9ca3af;
+        --color-text-depend: #27272a;
+        --color-accent: #a4bdfc;
+        --shadow-accent: 0 0 12px 2px #a4bdfc;
+        --color-border-primary: #52525c;
+        --color-layer-background: #39393b;
+    }
+}
+@layer utilities {
+    .bg-primary {
+        background-color: var(--color-background-primary);
+    }
+    .text-primary {
+        color: var(--color-text-primary);
+    }
+    .text-secondary {
+        color: var(--color-text-secondary);
+    }
+    .text-accent {
+        color: var(--color-accent);
+    }
+    .shadow-accent {
+        box-shadow: var(--shadow-accent);
+    }
+    .border-primary {
+        border-color: var(--color-border-primary);
+    }
+    .text-depend {
+        color: var(--color-text-depend);
+    }
+    .bg-layer {
+        background-color: var(--color-layer-background);
+    }
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 div {
     user-select: none;
     -webkit-user-select: none;

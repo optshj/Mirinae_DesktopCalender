@@ -7,6 +7,7 @@ import { MdOutlineRefresh } from 'react-icons/md'
 
 import LoginButton from '@/features/user/ui/LoginButton'
 import DropDown from '@/shared/ui/DropDown'
+import DarkModeButton from '@/features/darkmode/DarkModeButton'
 
 export default function Menu() {
     const [isDrag, setIsDrag] = useState(false)
@@ -25,11 +26,11 @@ export default function Menu() {
         fetchOpacity()
     }, [])
     return (
-        <div className="flex items-center gap-4">
-            <LuFoldVertical size={24} color="#1F2937" />
-            <BsArrowsMove size={32} color="#1F2937" style={{ WebkitAppRegion: 'drag' } as any} className="p-1" />
-            <MdOutlineRefresh size={24} color="#1F2937" onClick={() => window.api.safeReload()} />
-            <DropDown trigger={<IoMdMore size={32} color="#1F2937" />} align="right">
+        <div className="text-primary flex items-center gap-4">
+            <LuFoldVertical size={24} />
+            <BsArrowsMove size={32} style={{ WebkitAppRegion: 'drag' } as any} className="p-1" />
+            <MdOutlineRefresh size={24} onClick={() => window.api.safeReload()} />
+            <DropDown trigger={<IoMdMore size={32} />} align="right">
                 <LoginButton />
                 {isDrag ? (
                     <div
@@ -67,6 +68,10 @@ export default function Menu() {
                         />
                         <span className="text-xs font-semibold">{Math.round(opacity * 100)}%</span>
                     </div>
+                </div>
+                <div className="rounded px-2 py-1">
+                    <label>다크모드</label>
+                    <DarkModeButton />
                 </div>
 
                 <div onClick={() => window.api.quitApp()} className="cursor-pointer rounded px-2 py-1 text-red-600 hover:bg-red-50">

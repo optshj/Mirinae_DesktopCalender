@@ -32,7 +32,7 @@ export default function ScheduleModal({ date, items, colors, onClose, onSuccess 
 
     return (
         <Modal onClose={onClose}>
-            <div className="mb-2 text-lg font-bold">
+            <div className="text-primary mb-2 text-lg font-bold">
                 {date.getMonth() + 1}월 {date.getDate()}일 일정
             </div>
             <EventListDetail items={items} date={date} onSuccess={onSuccess} />
@@ -41,7 +41,7 @@ export default function ScheduleModal({ date, items, colors, onClose, onSuccess 
                 <AddEventForm date={date} colors={colors} onSuccess={handleAddSuccess} onCancel={() => setShowForm(false)} />
             ) : (
                 <button
-                    className="mt-2 w-full rounded-xl border-2 border-dashed border-zinc-300 py-3 text-center font-semibold text-zinc-400"
+                    className="text-primary mt-2 w-full rounded-xl border-2 border-dashed border-zinc-300 py-3 text-center font-semibold"
                     onClick={() => setShowForm(true)}
                     type="button"
                 >

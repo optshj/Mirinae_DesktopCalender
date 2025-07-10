@@ -38,14 +38,14 @@ export default function AddEventForm({ date, colors, onSuccess, onCancel }: AddE
         <form
             onSubmit={handleSubmit}
             onKeyDown={handleFormKeyDown}
-            className="mt-2 flex flex-col gap-3 rounded-xl border bg-white p-4"
+            className="mt-2 flex flex-col gap-3 rounded-xl border p-4"
             style={{ borderColor: selectedColor }}
         >
             <div className="flex flex-col gap-1">
                 <label style={{ color: selectedColor }}>일정 제목</label>
                 <HangulInput
                     id="summary"
-                    className="rounded-lg border border-zinc-300 py-2 pr-20 pl-3 focus:ring-0 focus:outline-none"
+                    className="text-primary rounded-lg border border-zinc-300 py-2 pr-20 pl-3 focus:ring-0 focus:outline-none"
                     type="text"
                     value={summary}
                     onChange={(newSummary) => setSummary(newSummary)}

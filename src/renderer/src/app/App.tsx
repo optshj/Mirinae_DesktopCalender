@@ -1,5 +1,5 @@
-import Provider from './Provider'
 import Pages from '@/pages'
+import Provider from './provider'
 
 export default function App() {
     return (

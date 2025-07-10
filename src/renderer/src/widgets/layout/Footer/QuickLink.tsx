@@ -1,7 +1,7 @@
 export default function QuickLink({ items }: { items: any }) {
     return (
-        <section className="border-bg-gray flex-1 rounded-xl border bg-white p-4">
-            <h3 className="mb-4 text-base font-semibold">바로가기</h3>
+        <section className="border-bg-gray bg-primary flex-1 rounded-xl border p-4">
+            <h3 className="text-primary mb-4 text-base font-semibold">바로가기</h3>
             <div className="flex flex-row gap-6">
                 {items.map((link, i) => (
                     <div key={i} className="flex flex-col items-center gap-2 rounded-xl p-4">

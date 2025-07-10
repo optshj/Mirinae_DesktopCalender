@@ -28,8 +28,8 @@ export default function CalendarGrid({ days, month, items, onSuccess, colors }: 
 
     return (
         <>
-            <div className="border-bg-gray flex w-full flex-col overflow-hidden rounded-xl border bg-white">
-                <div className="grid grid-cols-7 bg-[#F9FAFB] text-center font-semibold text-[#4B5563]">
+            <div className="bg-primary flex w-full flex-col overflow-hidden rounded-xl">
+                <div className="text-scondary grid grid-cols-7 bg-[#F9FAFB] text-center font-semibold dark:bg-zinc-600">
                     {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
                         <div className="py-2" key={day}>
                             {day}
@@ -43,12 +43,10 @@ export default function CalendarGrid({ days, month, items, onSuccess, colors }: 
                         return (
                             <div
                                 key={idx}
-                                className={`border-bg-gray flex h-28 w-full flex-col border py-1 ${isToday ? 'shadow-all' : ''}`}
+                                className={`border-primary flex h-28 w-full flex-col border py-1 ${isToday ? 'shadow-accent' : ''}`}
                                 onDoubleClick={() => handleDateDoubleClick(date)}
                             >
-                                <div
-                                    className={`border-bg-gray pl-2 font-semibold ${isCurrentMonth ? `${isToday ? 'text-main-color' : 'text-[#111827]'}` : 'text-font-gray'} `}
-                                >
+                                <div className={`pl-2 font-semibold ${isCurrentMonth ? `${isToday ? 'text-main-color' : 'text-primary'}` : 'text-secondary'} `}>
                                     {date.getDate()}
                                 </div>
                                 <EventList items={items} date={date} />
