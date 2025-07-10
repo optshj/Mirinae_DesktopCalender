@@ -4,20 +4,20 @@ import Modal from '@/shared/ui/Modal'
 
 import AddEventForm from '@/features/edit/ui/AddEvent'
 import EventListDetail from '@/entities/event/ui/EventListDetail'
+import { useCalendarItems } from '@/app/provider/CalendarItems'
 
 interface ScheduleModalProps {
     date: Date
     items: EventItemWithColor[] | null
     colors: ColorType | null
     onClose: () => void
-    onSuccess: () => Promise<void>
 }
 
-export default function ScheduleModal({ date, items, colors, onClose, onSuccess }: ScheduleModalProps) {
+export default function ScheduleModal({ date, items, colors, onClose }: ScheduleModalProps) {
     const [showForm, setShowForm] = useState(false)
-
+    const { refresh } = useCalendarItems()
     const handleAddSuccess = async () => {
-        await onSuccess()
+        await refresh()
         setShowForm(false)
     }
     useEffect(() => {
@@ -35,7 +35,7 @@ export default function ScheduleModal({ date, items, colors, onClose, onSuccess 
             <div className="text-primary mb-2 text-lg font-bold">
                 {date.getMonth() + 1}월 {date.getDate()}일 일정
             </div>
-            <EventListDetail items={items} date={date} onSuccess={onSuccess} />
+            <EventListDetail items={items} date={date} onSuccess={refresh} />
 
             {showForm ? (
                 <AddEventForm date={date} colors={colors} onSuccess={handleAddSuccess} onCancel={() => setShowForm(false)} />

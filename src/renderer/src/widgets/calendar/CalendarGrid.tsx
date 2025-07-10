@@ -1,20 +1,18 @@
 import { useState } from 'react'
 import { isSameDay } from '@/shared/lib/dateFunction'
-import { ColorType, EventItemWithColor } from '@/shared/types/google'
 
 import ScheduleModal from './ScheduleModal'
 import EventList from '@/entities/event/ui/EventList'
+import { useCalendarItems } from '@/app/provider/CalendarItems'
 
 interface CalendarGridProps {
     days: Date[]
     month: number
-    items: EventItemWithColor[] | null
-    colors: ColorType | null
-    onSuccess: () => Promise<void>
 }
-export default function CalendarGrid({ days, month, items, onSuccess, colors }: CalendarGridProps) {
+export default function CalendarGrid({ days, month }: CalendarGridProps) {
     const [modalOpen, setModalOpen] = useState(false)
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+    const { items, colors } = useCalendarItems()
 
     const handleDateDoubleClick = (date: Date) => {
         setSelectedDate(date)
@@ -56,7 +54,7 @@ export default function CalendarGrid({ days, month, items, onSuccess, colors }: 
                 </div>
             </div>
 
-            {modalOpen && selectedDate && <ScheduleModal onClose={closeModal} date={selectedDate} items={items} colors={colors} onSuccess={onSuccess} />}
+            {modalOpen && selectedDate && <ScheduleModal onClose={closeModal} date={selectedDate} items={items} colors={colors} />}
         </>
     )
 }
