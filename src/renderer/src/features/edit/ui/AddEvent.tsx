@@ -14,6 +14,12 @@ interface AddEventFormProps {
 export default function AddEventForm({ date, colors, onSuccess, onCancel }: AddEventFormProps) {
     const { tokens } = useLogin()
     const { addEvent, loading } = useEditEvent(tokens.access_token)
+    const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault()
+            handleSubmit(e as any)
+        }
+    }
 
     const [summary, setSummary] = useState('')
     const [colorId, setColorId] = useState('1')
@@ -29,10 +35,24 @@ export default function AddEventForm({ date, colors, onSuccess, onCancel }: AddE
     }
 
     return (
-        <form onSubmit={handleSubmit} className="mt-2 flex flex-col gap-3 rounded-xl border bg-white p-4" style={{ borderColor: selectedColor }}>
+        <form
+            onSubmit={handleSubmit}
+            onKeyDown={handleFormKeyDown}
+            className="mt-2 flex flex-col gap-3 rounded-xl border bg-white p-4"
+            style={{ borderColor: selectedColor }}
+        >
             <div className="flex flex-col gap-1">
                 <label style={{ color: selectedColor }}>일정 제목</label>
-                <HangulInput style={{ borderColor: selectedColor }} value={summary} onChange={setSummary} required autoFocus />
+                <HangulInput
+                    id="summary"
+                    className="rounded-lg border border-zinc-300 py-2 pr-20 pl-3 focus:ring-0 focus:outline-none"
+                    type="text"
+                    value={summary}
+                    onChange={(newSummary) => setSummary(newSummary)}
+                    required
+                    autoFocus
+                    style={{ borderColor: selectedColor }}
+                />
             </div>
             <div className="grid grid-cols-6 gap-2 px-2">
                 {colors &&
@@ -45,11 +65,11 @@ export default function AddEventForm({ date, colors, onSuccess, onCancel }: AddE
                         />
                     ))}
             </div>
-            <div className="flex gap-2">
-                <button type="submit" disabled={loading} style={{ backgroundColor: selectedColor }}>
+            <div className="mt-2 flex gap-2">
+                <button type="submit" className="flex-1 rounded-lg px-3 py-2 font-semibold text-white shadow" style={{ backgroundColor: selectedColor }}>
                     추가
                 </button>
-                <button type="button" onClick={onCancel}>
+                <button type="button" className="flex-1 rounded-lg border border-zinc-300 bg-zinc-100 px-3 py-2 font-semibold text-zinc-500" onClick={onCancel}>
                     취소
                 </button>
             </div>

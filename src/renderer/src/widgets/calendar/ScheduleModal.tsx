@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ColorType, EventItemWithColor } from '@/shared/types/google'
 import Modal from '@/shared/ui/Modal'
 
@@ -20,6 +20,15 @@ export default function ScheduleModal({ date, items, colors, onClose, onSuccess 
         await onSuccess()
         setShowForm(false)
     }
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.ctrlKey && e.key === 'Enter' && !showForm) {
+                setShowForm(true)
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [])
 
     return (
         <Modal onClose={onClose}>
@@ -31,7 +40,13 @@ export default function ScheduleModal({ date, items, colors, onClose, onSuccess 
             {showForm ? (
                 <AddEventForm date={date} colors={colors} onSuccess={handleAddSuccess} onCancel={() => setShowForm(false)} />
             ) : (
-                <button onClick={() => setShowForm(true)}>+ 일정 추가</button>
+                <button
+                    className="mt-2 w-full rounded-xl border-2 border-dashed border-zinc-300 py-3 text-center font-semibold text-zinc-400"
+                    onClick={() => setShowForm(true)}
+                    type="button"
+                >
+                    + 일정 추가
+                </button>
             )}
         </Modal>
     )
