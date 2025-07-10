@@ -1,10 +1,10 @@
-import { useLogin } from '@/shared/api/useLogin'
+import { useLogin } from '@/features/user/api/useLogin'
 import { useDate } from '@/shared/lib/useDate'
 import { useGoogleCalendar } from '@/shared/api/useGoogleCalendar'
 
-import CalendarHeader from '@/entities/CalendarHeader'
-import CalendarGrid from '@/entities/CalendarGrid'
-import Footer from '@/entities/Footer'
+import CalendarHeader from '@/widgets/layout/Header'
+import CalendarGrid from '@/widgets/calendar/CalendarGrid'
+import Footer from '@/widgets/layout/Footer'
 
 export default function Calendar() {
     const { tokens } = useLogin()

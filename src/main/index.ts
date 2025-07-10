@@ -6,7 +6,7 @@ import icon from '../../resources/icon.png?asset'
 import http from 'http'
 import crypto from 'crypto'
 import keytar from 'keytar'
-const Store = require('electron-store')
+import Store from 'electron-store'
 
 const SERVICE_NAME = 'mirinae'
 const ACCOUNT_NAME = 'google-refresh-token'
@@ -19,14 +19,16 @@ const SCOPES = 'https://www.googleapis.com/auth/calendar'
 let authServer: http.Server | null = null
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
-const store = new Store.default({
-    'window-bounds': {
-        width: 1280,
-        height: 800,
-        x: undefined,
-        y: undefined
-    },
-    'window-opacity': 1.0
+const store = new (Store as any).default({
+    defaults: {
+        'window-bounds': {
+            width: 1280,
+            height: 800,
+            x: null,
+            y: null
+        },
+        'window-opacity': 1
+    }
 })
 
 function createWindow(): void {

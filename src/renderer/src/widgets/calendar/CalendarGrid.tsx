@@ -3,6 +3,7 @@ import { isSameDay } from '@/shared/lib/dateFunction'
 import { ColorType, EventItemWithColor } from '@/shared/types/google'
 
 import ScheduleModal from './ScheduleModal'
+import EventList from '@/entities/event/ui/EventList'
 
 interface CalendarGridProps {
     days: Date[]
@@ -58,31 +59,6 @@ export default function CalendarGrid({ days, month, items, onSuccess, colors }: 
             </div>
 
             {modalOpen && selectedDate && <ScheduleModal onClose={closeModal} date={selectedDate} items={items} colors={colors} onSuccess={onSuccess} />}
-        </>
-    )
-}
-
-function EventList({ items, date }: { items: EventItemWithColor[] | null; date: Date }) {
-    const events =
-        items
-            ?.filter((item) => {
-                if (!item.start.dateTime) return false
-                return isSameDay(new Date(item.start.dateTime), date)
-            })
-            .slice(0, 3) ?? []
-    return (
-        <>
-            {events.map((event, i) => (
-                <div
-                    key={i}
-                    style={{
-                        background: event.color.background
-                    }}
-                    className="mx-2 mt-1 flex items-center overflow-hidden rounded-lg px-2 py-1 text-start text-sm text-white"
-                >
-                    {event.summary}
-                </div>
-            ))}
         </>
     )
 }
