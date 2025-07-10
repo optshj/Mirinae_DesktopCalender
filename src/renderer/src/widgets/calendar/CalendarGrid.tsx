@@ -29,7 +29,7 @@ export default function CalendarGrid({ days, month, items, onSuccess, colors }: 
     return (
         <>
             <div className="bg-primary flex w-full flex-col overflow-hidden rounded-xl">
-                <div className="text-scondary grid grid-cols-7 bg-[#F9FAFB] text-center font-semibold dark:bg-zinc-600">
+                <div className="text-scondary grid grid-cols-7 bg-[#F9FAFB] text-center font-semibold dark:bg-zinc-800 dark:text-white">
                     {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
                         <div className="py-2" key={day}>
                             {day}

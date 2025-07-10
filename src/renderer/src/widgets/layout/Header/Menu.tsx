@@ -74,7 +74,7 @@ export default function Menu() {
                     <DarkModeButton />
                 </div>
 
-                <div onClick={() => window.api.quitApp()} className="cursor-pointer rounded px-2 py-1 text-red-600 hover:bg-red-50">
+                <div onClick={() => window.api.quitApp()} className="cursor-pointer rounded px-2 py-1 text-red-600">
                     앱 종료
                 </div>
             </DropDown>

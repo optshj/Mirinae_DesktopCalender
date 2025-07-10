@@ -38,14 +38,14 @@ export default function AddEventForm({ date, colors, onSuccess, onCancel }: AddE
         <form
             onSubmit={handleSubmit}
             onKeyDown={handleFormKeyDown}
-            className="mt-2 flex flex-col gap-3 rounded-xl border p-4"
+            className="mt-2 flex flex-col gap-3 rounded-xl border p-4 dark:saturate-70"
             style={{ borderColor: selectedColor }}
         >
             <div className="flex flex-col gap-1">
                 <label style={{ color: selectedColor }}>일정 제목</label>
                 <HangulInput
                     id="summary"
-                    className="text-primary rounded-lg border border-zinc-300 py-2 pr-20 pl-3 focus:ring-0 focus:outline-none"
+                    className="text-primary rounded-lg border border-zinc-300 py-2 pr-20 pl-3 focus:ring-0 focus:outline-none dark:saturate-70"
                     type="text"
                     value={summary}
                     onChange={(newSummary) => setSummary(newSummary)}
@@ -59,14 +59,18 @@ export default function AddEventForm({ date, colors, onSuccess, onCancel }: AddE
                     Object.entries(colors.event).map(([key, color]) => (
                         <div
                             key={key}
-                            className="inline-block h-6 w-6 cursor-pointer rounded-full"
+                            className="inline-block h-6 w-6 cursor-pointer rounded-full dark:saturate-70"
                             style={{ backgroundColor: color.background }}
                             onClick={() => setColorId(key)}
                         />
                     ))}
             </div>
             <div className="mt-2 flex gap-2">
-                <button type="submit" className="flex-1 rounded-lg px-3 py-2 font-semibold text-white shadow" style={{ backgroundColor: selectedColor }}>
+                <button
+                    type="submit"
+                    className="flex-1 rounded-lg px-3 py-2 font-semibold text-white shadow dark:saturate-70"
+                    style={{ backgroundColor: selectedColor }}
+                >
                     추가
                 </button>
                 <button type="button" className="flex-1 rounded-lg border border-zinc-300 bg-zinc-100 px-3 py-2 font-semibold text-zinc-500" onClick={onCancel}>

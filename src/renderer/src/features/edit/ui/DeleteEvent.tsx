@@ -18,7 +18,7 @@ export function DeleteEventButton({ eventId, onSuccess }: DeleteEventButtonProps
     }
 
     return (
-        <button onClick={handleDelete} disabled={loading} className="text-base text-red-300 disabled:opacity-50" aria-label="일정 삭제">
+        <button onClick={handleDelete} disabled={loading} className="text-base text-red-300" aria-label="일정 삭제">
             <BiTrashAlt className="text-lg" />
         </button>
     )

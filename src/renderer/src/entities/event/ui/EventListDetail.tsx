@@ -15,7 +15,7 @@ export default function EventListDetail({ items, date, onSuccess }: EventListDet
             {events.map((event) => (
                 <div
                     key={event.id}
-                    className="text-depend mb-2 flex items-center justify-between rounded-xl p-3"
+                    className="text-depend mb-2 flex items-center justify-between rounded-xl p-3 dark:saturate-70"
                     style={{ background: event.color.background }}
                 >
                     <div className="flex-1">

@@ -16,7 +16,7 @@ export default function EventList({ items, date }: { items: EventItemWithColor[]
                     style={{
                         background: event.color.background
                     }}
-                    className="text-depend mx-2 mt-1 flex items-center overflow-hidden rounded-lg px-2 py-1 text-start text-sm"
+                    className="text-depend mx-2 mt-1 flex items-center overflow-hidden rounded-lg px-2 py-1 text-start text-sm dark:saturate-70"
                 >
                     {event.summary}
                 </div>
