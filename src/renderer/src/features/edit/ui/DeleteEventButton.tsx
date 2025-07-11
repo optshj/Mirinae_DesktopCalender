@@ -6,7 +6,6 @@ interface DeleteEventButtonProps {
     eventId: string
     onSuccess: () => Promise<void>
 }
-
 export function DeleteEventButton({ eventId, onSuccess }: DeleteEventButtonProps) {
     const { tokens } = useLogin()
     const { deleteEvent, loading } = useEditEvent(tokens.access_token)

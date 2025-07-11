@@ -1,5 +1,5 @@
 import { isSameDay } from '@/shared/lib/dateFunction'
-import { EventItemWithColor } from '@/shared/types/google'
+import { EventItemWithColor } from '@/shared/types/EventTypes'
 
 export function EventList({ items, date }: { items: EventItemWithColor[] | null; date: Date }) {
     const events = items

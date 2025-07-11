@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { IoCloseOutline } from 'react-icons/io5'
 
-export default function Modal({ children, onClose }) {
+export default function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {

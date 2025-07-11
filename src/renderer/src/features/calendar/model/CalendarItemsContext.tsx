@@ -1,6 +1,6 @@
 import { useLogin } from '@/features/user/api/useLogin'
-import { useGoogleCalendar } from '@/shared/api/useGoogleCalendar'
-import { ColorType, EventItemWithColor } from '@/shared/types/google'
+import { useGoogleCalendar } from '@/features/calendar/api/useGoogleCalendar'
+import { ColorType, EventItemWithColor } from '@/shared/types/EventTypes'
 import { createContext, useContext } from 'react'
 
 export const CalendarItemsContext = createContext<{

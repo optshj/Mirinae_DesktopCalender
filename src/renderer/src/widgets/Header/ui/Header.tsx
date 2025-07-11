@@ -1,14 +1,14 @@
+import { SlArrowLeft, SlArrowRight } from 'react-icons/sl'
 import { IoMdMore } from 'react-icons/io'
 
-import DropDown from '@/shared/ui/DropDown'
-
-import { SlArrowLeft, SlArrowRight } from 'react-icons/sl'
 import { MoveActiveButton, MoveButton } from '@/features/move'
 import { FlipButton } from '@/features/flip'
 import { RefreshButton } from '@/features/refresh'
 import { LoginButton } from '@/features/user'
 import { OpacityButton } from '@/features/opacity'
 import { QuitAppButton } from '@/features/quit'
+
+import DropDown from '@/shared/ui/DropDown'
 
 interface CalendarHeaderProps {
     displayMonth: number

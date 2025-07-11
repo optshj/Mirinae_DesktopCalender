@@ -1,4 +1,4 @@
-import { EventItemWithColor } from '@/shared/types/google'
+import { EventItemWithColor } from '@/shared/types/EventTypes'
 
 export function EventItem({ event }: { event: EventItemWithColor }) {
     return (

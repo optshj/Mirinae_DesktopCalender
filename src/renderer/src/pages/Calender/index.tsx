@@ -1,12 +1,12 @@
 import { useDate } from '@/shared/lib/useDate'
 
-import { useFlipCalendar } from '@/app/provider/FlipCalendarProvider'
+import { useFlipCalendar } from '@/features/flip/model/FlipCalendarContext'
 
 import { Header } from '@/widgets/Header'
 import { Footer } from '@/widgets/Footer'
 import { CalendarGrid } from '@/widgets/Calendar'
 
-export default function Calendar() {
+export function Calendar() {
     const { days, month, displayMonth, year, handlePrevMonth, handleNextMonth } = useDate()
     const { isFlipCalendar } = useFlipCalendar()
 
@@ -17,7 +17,7 @@ export default function Calendar() {
                 {isFlipCalendar ? null : (
                     <>
                         <CalendarGrid days={days} month={month} />
-                        <Footer quickLinks={[]} />
+                        <Footer />
                     </>
                 )}
             </div>

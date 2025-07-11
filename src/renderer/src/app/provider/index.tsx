@@ -1,7 +1,7 @@
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { DarkModeProvider } from './DarkModeProvider'
-import { CalendarItemsProvider } from './CalendarItemsProvider'
-import { FlipCalendarProvider } from './FlipCalendarProvider'
+import { CalendarItemsProvider } from '@/features/calendar'
+import { DarkModeProvider } from '@/features/darkmode'
+import { FlipCalendarProvider } from '@/features/flip'
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID
 

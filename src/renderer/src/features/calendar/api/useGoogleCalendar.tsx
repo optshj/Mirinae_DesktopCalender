@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import { ColorType, EventItem, EventItemWithColor } from '../types/google'
+import { ColorType, EventItem, EventItemWithColor } from '../../../shared/types/EventTypes'
 
 export function useGoogleCalendar(access_token: string) {
     const [items, setItems] = useState<EventItemWithColor[] | null>(null)

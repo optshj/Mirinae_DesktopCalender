@@ -1,4 +1,4 @@
-import { useDarkMode } from '@/app/provider/DarkModeProvider'
+import { useDarkMode } from '../model/DarkModeContext'
 import { MdDarkMode, MdLightMode } from 'react-icons/md'
 
 export function DarkModeButton() {

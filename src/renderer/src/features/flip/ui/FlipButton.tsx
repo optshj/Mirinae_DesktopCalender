@@ -1,5 +1,5 @@
 import { LuFoldVertical } from 'react-icons/lu'
-import { useFlipCalendar } from '@/app/provider/FlipCalendarProvider'
+import { useFlipCalendar } from '../model/FlipCalendarContext'
 
 export function FlipButton() {
     const { flipCalendar } = useFlipCalendar()

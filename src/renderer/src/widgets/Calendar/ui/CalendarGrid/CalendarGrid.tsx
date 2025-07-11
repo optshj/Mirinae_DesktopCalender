@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { isSameDay } from '@/shared/lib/dateFunction'
 
-import { useCalendarItems } from '@/app/provider/CalendarItemsProvider'
+import { useCalendarItems } from '@/features/calendar'
 import { ScheduleModal } from '../ScheduleModal/ScheduleModal'
 import { EventList } from '@/entities/event'
 

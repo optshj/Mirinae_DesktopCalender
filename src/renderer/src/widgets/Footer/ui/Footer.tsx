@@ -1,19 +1,15 @@
-import TodayEvent from '../TodayEvent'
-import UpcomingEvent from '../UpcomingEvent'
+import { TodayEvent, UpcomingEvent } from '@/entities/event'
 import QuickLink from '../QuickLink'
-import { useCalendarItems } from '@/app/provider/CalendarItemsProvider'
+import { useCalendarItems } from '@/features/calendar'
 
-interface FooterProps {
-    quickLinks: any[]
-}
-export function Footer({ quickLinks }: FooterProps) {
+export function Footer() {
     const { items: todayEvents } = useCalendarItems()
 
     return (
         <aside className="mt-2 flex h-48 flex-row gap-2">
             <TodayEvent items={todayEvents} />
             <UpcomingEvent items={todayEvents} />
-            <QuickLink items={quickLinks} />
+            <QuickLink />
         </aside>
     )
 }
