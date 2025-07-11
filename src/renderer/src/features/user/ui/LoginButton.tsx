@@ -1,6 +1,6 @@
 import { useLogin } from '@/features/user/api/useLogin'
 
-export default function LoginButton() {
+export function LoginButton() {
     const { login, logout, tokens } = useLogin()
     return (
         <>

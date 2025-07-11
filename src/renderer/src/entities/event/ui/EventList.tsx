@@ -1,7 +1,7 @@
 import { isSameDay } from '@/shared/lib/dateFunction'
 import { EventItemWithColor } from '@/shared/types/google'
 
-export default function EventList({ items, date }: { items: EventItemWithColor[] | null; date: Date }) {
+export function EventList({ items, date }: { items: EventItemWithColor[] | null; date: Date }) {
     const events = items
         ?.filter((item) => {
             if (!item.start.dateTime) return false

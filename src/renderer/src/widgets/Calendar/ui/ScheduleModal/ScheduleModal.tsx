@@ -1,10 +1,10 @@
+import Modal from '@/shared/ui/Modal'
 import { useEffect, useState } from 'react'
 import { ColorType, EventItemWithColor } from '@/shared/types/google'
-import Modal from '@/shared/ui/Modal'
+import { useCalendarItems } from '@/app/provider/CalendarItemsProvider'
+import { EventListDetail } from '@/entities/event'
 
-import AddEventForm from '@/features/edit/ui/AddEvent'
-import EventListDetail from '@/entities/event/ui/EventListDetail'
-import { useCalendarItems } from '@/app/provider/CalendarItems'
+import { AddEventForm } from '@/features/edit'
 
 interface ScheduleModalProps {
     date: Date
@@ -13,7 +13,7 @@ interface ScheduleModalProps {
     onClose: () => void
 }
 
-export default function ScheduleModal({ date, items, colors, onClose }: ScheduleModalProps) {
+export function ScheduleModal({ date, items, colors, onClose }: ScheduleModalProps) {
     const [showForm, setShowForm] = useState(false)
     const { refresh } = useCalendarItems()
     const handleAddSuccess = async () => {
@@ -32,7 +32,7 @@ export default function ScheduleModal({ date, items, colors, onClose }: Schedule
 
     return (
         <Modal onClose={onClose}>
-            <div className="text-primary mb-2 text-lg font-bold">
+            <div className="text-primary mb-2 text-lg font-bold" style={{ textAlign: 'center' }}>
                 {date.getMonth() + 1}월 {date.getDate()}일 일정
             </div>
             <EventListDetail items={items} date={date} onSuccess={refresh} />

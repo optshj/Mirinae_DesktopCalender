@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { DeleteEventButton } from '@/features/edit/ui/DeleteEvent'
+import { DeleteEventButton } from '@/features/edit/ui/DeleteEventButton'
 import { isSameDay } from '@/shared/lib/dateFunction'
 import { EventItemWithColor } from '@/shared/types/google'
 
@@ -8,7 +8,7 @@ interface EventListDetailProps {
     date: Date
     onSuccess: () => Promise<void>
 }
-export default function EventListDetail({ items, date, onSuccess }: EventListDetailProps) {
+export function EventListDetail({ items, date, onSuccess }: EventListDetailProps) {
     const events = useMemo(() => items?.filter((item) => item.start.dateTime && isSameDay(new Date(item.start.dateTime), date)) ?? [], [items, date])
     return (
         <>

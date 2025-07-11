@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { isSameDay } from '@/shared/lib/dateFunction'
 
-import ScheduleModal from './ScheduleModal'
-import EventList from '@/entities/event/ui/EventList'
-import { useCalendarItems } from '@/app/provider/CalendarItems'
+import { useCalendarItems } from '@/app/provider/CalendarItemsProvider'
+import { ScheduleModal } from '../ScheduleModal/ScheduleModal'
+import { EventList } from '@/entities/event'
 
 interface CalendarGridProps {
     days: Date[]
     month: number
 }
-export default function CalendarGrid({ days, month }: CalendarGridProps) {
+export function CalendarGrid({ days, month }: CalendarGridProps) {
     const [modalOpen, setModalOpen] = useState(false)
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const { items, colors } = useCalendarItems()

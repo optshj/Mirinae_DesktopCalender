@@ -1,12 +1,12 @@
-import TodayEvent from './TodayEvent'
-import UpcomingEvent from './UpcomingEvent'
-import QuickLink from './QuickLink'
-import { useCalendarItems } from '@/app/provider/CalendarItems'
+import TodayEvent from '../TodayEvent'
+import UpcomingEvent from '../UpcomingEvent'
+import QuickLink from '../QuickLink'
+import { useCalendarItems } from '@/app/provider/CalendarItemsProvider'
 
 interface FooterProps {
     quickLinks: any[]
 }
-export default function Footer({ quickLinks }: FooterProps) {
+export function Footer({ quickLinks }: FooterProps) {
     const { items: todayEvents } = useCalendarItems()
 
     return (

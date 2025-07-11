@@ -11,7 +11,7 @@ interface AddEventFormProps {
     onCancel: () => void
 }
 
-export default function AddEventForm({ date, colors, onSuccess, onCancel }: AddEventFormProps) {
+export function AddEventForm({ date, colors, onSuccess, onCancel }: AddEventFormProps) {
     const { tokens } = useLogin()
     const { addEvent, loading } = useEditEvent(tokens.access_token)
     const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
