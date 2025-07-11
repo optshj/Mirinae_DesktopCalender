@@ -1,6 +1,6 @@
 import React, { useState, InputHTMLAttributes, useEffect, useRef } from 'react'
 import Hangul from 'hangul-js'
-import { convertEngToKor } from '@/shared/lib/en2kr'
+import { convertEngToKor } from '../lib/en2kr'
 
 interface HangulInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
     value: string

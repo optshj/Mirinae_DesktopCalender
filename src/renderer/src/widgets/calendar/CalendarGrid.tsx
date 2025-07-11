@@ -41,7 +41,7 @@ export default function CalendarGrid({ days, month }: CalendarGridProps) {
                         return (
                             <div
                                 key={idx}
-                                className={`border-primary flex h-28 w-full flex-col border py-1 ${isToday ? 'shadow-accent' : ''}`}
+                                className={`border-primary flex h-28 w-full flex-col border py-1 ${isToday ? 'shadow-all' : ''}`}
                                 onDoubleClick={() => handleDateDoubleClick(date)}
                             >
                                 <div className={`pl-2 font-semibold ${isCurrentMonth ? `${isToday ? 'text-main-color' : 'text-primary'}` : 'text-secondary'} `}>

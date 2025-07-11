@@ -1,5 +1,4 @@
 const KOREAN_KEYMAP = {
-    // 자음 (Consonants)
     r: 'ㄱ',
     R: 'ㄲ',
     s: 'ㄴ',
@@ -20,7 +19,6 @@ const KOREAN_KEYMAP = {
     v: 'ㅍ',
     g: 'ㅎ',
 
-    // 모음 (Vowels)
     k: 'ㅏ',
     o: 'ㅐ',
     O: 'ㅒ',

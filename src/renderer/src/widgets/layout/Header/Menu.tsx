@@ -8,10 +8,12 @@ import { MdOutlineRefresh } from 'react-icons/md'
 import LoginButton from '@/features/user/ui/LoginButton'
 import DropDown from '@/shared/ui/DropDown'
 import DarkModeButton from '@/features/darkmode/DarkModeButton'
+import { useFlipCalendar } from '@/app/provider/FlipCalendar'
 
 export default function Menu() {
     const [isDrag, setIsDrag] = useState(false)
     const [opacity, setOpacity] = useState(1.0)
+    const { flipCalendar } = useFlipCalendar()
 
     const handleOpacityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newOpacity = parseFloat(e.target.value)
@@ -27,7 +29,7 @@ export default function Menu() {
     }, [])
     return (
         <div className="text-primary flex items-center gap-4">
-            <LuFoldVertical size={24} />
+            <LuFoldVertical size={24} onClick={() => flipCalendar()} />
             <BsArrowsMove size={32} style={{ WebkitAppRegion: 'drag' } as any} className="p-1" />
             <MdOutlineRefresh size={24} onClick={() => window.api.safeReload()} />
             <DropDown trigger={<IoMdMore size={32} />} align="right">
