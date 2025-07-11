@@ -13,16 +13,22 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
     const [summary, setSummary] = useState('')
     const [colorId, setColorId] = useState('1')
     const [showForm, setShowForm] = useState(false)
+
+    const [startTime, setStartTime] = useState('09:00')
+    const [endTime, setEndTime] = useState('10:00')
+
     const selectedColor = colors?.event?.[colorId]?.background || '#1F2937'
     const { refresh } = useCalendarItems()
     const { tokens } = useLogin()
     const { addEvent, loading } = useEditEvent(tokens.access_token)
+
     const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
         if (e.ctrlKey && e.key === 'Enter') {
             e.preventDefault()
             handleSubmit(e)
         }
     }
+
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.key === 'Enter' && !showForm) {
@@ -37,9 +43,20 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
         e.preventDefault()
         if (loading || !summary.trim()) return
 
-        await addEvent(date, summary, colorId)
+        const [startHour, startMinute] = startTime.split(':').map(Number)
+        const startDateTime = new Date(date)
+        startDateTime.setHours(startHour, startMinute, 0, 0)
+
+        const [endHour, endMinute] = endTime.split(':').map(Number)
+        const endDateTime = new Date(date)
+        endDateTime.setHours(endHour, endMinute, 0, 0)
+
+        await addEvent(startDateTime, endDateTime, summary, colorId)
         await refresh()
+
         setShowForm(false)
+        setSummary('')
+        setColorId('1')
     }
 
     return (
@@ -64,6 +81,36 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
                             style={{ borderColor: selectedColor }}
                         />
                     </div>
+
+                    {/* --- 추가: 시작 시간 및 종료 시간 선택 UI --- */}
+                    <div className="flex items-center gap-4">
+                        <div className="flex-1">
+                            <label className="block text-sm font-medium" style={{ color: selectedColor }}>
+                                시작 시간
+                            </label>
+                            <input
+                                type="time"
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                                className="text-primary mt-1 block w-full rounded-lg border border-zinc-300 p-2 focus:ring-0 focus:outline-none dark:saturate-70"
+                                style={{ borderColor: selectedColor }}
+                            />
+                        </div>
+                        <div className="flex-1">
+                            <label className="block text-sm font-medium" style={{ color: selectedColor }}>
+                                종료 시간
+                            </label>
+                            <input
+                                type="time"
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                                className="text-primary mt-1 block w-full rounded-lg border border-zinc-300 p-2 focus:ring-0 focus:outline-none dark:saturate-70"
+                                style={{ borderColor: selectedColor }}
+                            />
+                        </div>
+                    </div>
+                    {/* ------------------------------------ */}
+
                     <div className="grid grid-cols-6 gap-2 px-2">
                         {colors &&
                             Object.entries(colors.event).map(([key, color]) => (

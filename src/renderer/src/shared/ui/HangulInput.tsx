@@ -60,15 +60,5 @@ export default function HangulInput({ value, onChange, ...props }: HangulInputPr
         onChange(value + pastedText)
     }
 
-    return (
-        <div className="relative flex w-full items-center">
-            <input ref={inputRef} {...props} value={value} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={() => {}} autoComplete="off" />
-            <div
-                className={`absolute right-3 text-sm font-bold transition-colors select-none ${inputMode === 'ko' ? 'text-main-color' : 'text-zinc-400'}`}
-                style={{ pointerEvents: 'none' }}
-            >
-                {inputMode === 'ko' ? '한' : '영'}
-            </div>
-        </div>
-    )
+    return <input ref={inputRef} {...props} value={value} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={() => {}} autoComplete="off" />
 }

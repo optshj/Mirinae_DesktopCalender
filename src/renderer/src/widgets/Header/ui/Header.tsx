@@ -1,5 +1,6 @@
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl'
 import { IoMdMore } from 'react-icons/io'
+import DropDown from '@/shared/ui/DropDown'
 
 import { MoveActiveButton, MoveButton } from '@/features/move'
 import { FlipButton } from '@/features/flip'
@@ -7,8 +8,7 @@ import { RefreshButton } from '@/features/refresh'
 import { LoginButton } from '@/features/user'
 import { OpacityButton } from '@/features/opacity'
 import { QuitAppButton } from '@/features/quit'
-
-import DropDown from '@/shared/ui/DropDown'
+import { DarkModeButton } from '@/features/darkmode'
 
 interface CalendarHeaderProps {
     displayMonth: number
@@ -39,6 +39,7 @@ export function Header({ displayMonth, year, handlePrevMonth, handleNextMonth }:
                     <LoginButton />
                     <MoveActiveButton />
                     <OpacityButton />
+                    <DarkModeButton />
                     <QuitAppButton />
                 </DropDown>
             </div>
