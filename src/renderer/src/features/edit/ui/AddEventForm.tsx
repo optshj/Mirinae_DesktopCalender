@@ -3,7 +3,7 @@ import { ColorType } from '@/shared/types/EventTypes'
 import { useEditEvent } from '../api/useEditEvent'
 import HangulInput from '@/shared/ui/HangulInput'
 import { useLogin } from '@/features/user'
-import { useCalendarItems } from '@/features/calendar'
+import { useCalendarItems } from '@/features/event'
 
 interface AddEventFormProps {
     date: Date

@@ -1,5 +1,5 @@
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { CalendarItemsProvider } from '@/features/calendar'
+import { CalendarItemsProvider, ShowHolidayProvider } from '@/features/event'
 import { DarkModeProvider } from '@/features/darkmode'
 import { FlipCalendarProvider } from '@/features/flip'
 
@@ -10,7 +10,9 @@ export default function Provider({ children }: { children: React.ReactNode }) {
         <DarkModeProvider>
             <FlipCalendarProvider>
                 <CalendarItemsProvider>
-                    <GoogleOAuthProvider clientId={CLIENT_ID}>{children}</GoogleOAuthProvider>
+                    <ShowHolidayProvider>
+                        <GoogleOAuthProvider clientId={CLIENT_ID}>{children}</GoogleOAuthProvider>
+                    </ShowHolidayProvider>
                 </CalendarItemsProvider>
             </FlipCalendarProvider>
         </DarkModeProvider>

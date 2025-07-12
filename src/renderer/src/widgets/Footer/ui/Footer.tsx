@@ -1,6 +1,5 @@
 import { TodayEvent, UpcomingEvent } from '@/entities/event'
-import QuickLink from '../QuickLink'
-import { useCalendarItems } from '@/features/calendar'
+import { useCalendarItems } from '@/features/event'
 
 export function Footer() {
     const { items: todayEvents } = useCalendarItems()
@@ -9,7 +8,7 @@ export function Footer() {
         <aside className="mt-2 flex h-48 flex-row gap-2">
             <TodayEvent items={todayEvents} />
             <UpcomingEvent items={todayEvents} />
-            <QuickLink />
+            {/* <QuickLink /> */}
         </aside>
     )
 }

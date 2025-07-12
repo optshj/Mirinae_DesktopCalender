@@ -1,9 +1,12 @@
 import { formatDate, isSameDay } from '@/shared/lib/dateFunction'
 import { EventItemWithColor } from '@/shared/types/EventTypes'
-import { useMemo } from 'react'
 
 export function TodayEvent({ items }: { items: EventItemWithColor[] | null }) {
-    const todayOnly = useMemo(() => (items || []).filter((event) => isSameDay(new Date(), new Date(event.start.dateTime))), [items])
+    const todayOnly =
+        items?.filter((item) => {
+            if (!item.start.dateTime) return false
+            return isSameDay(new Date(item.start.dateTime), new Date())
+        }) ?? []
 
     return (
         <section className="border-bg-gray bg-primary flex-1 rounded-xl border p-4">

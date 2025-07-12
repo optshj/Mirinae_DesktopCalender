@@ -9,6 +9,7 @@ import { LoginButton } from '@/features/user'
 import { OpacityButton } from '@/features/opacity'
 import { QuitAppButton } from '@/features/quit'
 import { DarkModeButton } from '@/features/darkmode'
+import { HolidayButton } from '@/features/event'
 
 interface CalendarHeaderProps {
     displayMonth: number
@@ -40,6 +41,7 @@ export function Header({ displayMonth, year, handlePrevMonth, handleNextMonth }:
                     <MoveActiveButton />
                     <OpacityButton />
                     <DarkModeButton />
+                    <HolidayButton />
                     <QuitAppButton />
                 </DropDown>
             </div>

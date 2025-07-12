@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { isSameDay } from '@/shared/lib/dateFunction'
 
-import { useCalendarItems } from '@/features/calendar'
+import { useCalendarItems, useShowHoliday } from '@/features/event'
 import { ScheduleModal } from '../ScheduleModal/ScheduleModal'
 import { EventList } from '@/entities/event'
 
@@ -12,7 +12,8 @@ interface CalendarGridProps {
 export function CalendarGrid({ days, month }: CalendarGridProps) {
     const [modalOpen, setModalOpen] = useState(false)
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-    const { items, colors } = useCalendarItems()
+    const { items, holidayItems } = useCalendarItems()
+    const { isShow } = useShowHoliday()
 
     const handleDateDoubleClick = (date: Date) => {
         setSelectedDate(date)
@@ -47,14 +48,14 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                                 <div className={`pl-2 font-semibold ${isCurrentMonth ? `${isToday ? 'text-main-color' : 'text-primary'}` : 'text-secondary'} `}>
                                     {date.getDate()}
                                 </div>
-                                <EventList items={items} date={date} />
+                                <EventList items={items} holidayItems={isShow ? holidayItems : null} date={date} />
                             </div>
                         )
                     })}
                 </div>
             </div>
 
-            {modalOpen && selectedDate && <ScheduleModal onClose={closeModal} date={selectedDate} items={items} colors={colors} />}
+            {modalOpen && selectedDate && <ScheduleModal onClose={closeModal} date={selectedDate} />}
         </>
     )
 }

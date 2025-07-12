@@ -9,8 +9,9 @@ export function formatDate(date: string) {
 }
 
 // 예시 8 AM
-export function formatDateTIme(date: string) {
-    const d = new Date(date)
+export function formatDateTIme(date: { date?: string; dateTime?: string; timeZone?: string }) {
+    if (!date.dateTime) return null
+    const d = new Date(date.dateTime)
     const formatter = new Intl.DateTimeFormat('en-US', {
         hour: 'numeric',
         hour12: true
