@@ -24,7 +24,7 @@
         "appId": "com.mirinae",
         "productName": "미리내",
         "files": [
-            "out/",
+            "out/**/*",
             "package.json"
         ],
         "directories": {
@@ -34,10 +34,12 @@
             "target": "nsis",
             "icon": "resources/icon.png"
         },
-        "mac": {
-            "target": "dmg",
-            "icon": "resources/icon.png"
-        }
+        "extraResources": [
+            {
+                "from": "resources",
+                "to": "resources"
+            }
+        ]
     },
     "dependencies": {
         "@electron-toolkit/preload": "^3.0.1",

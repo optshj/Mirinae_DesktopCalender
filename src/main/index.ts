@@ -1,8 +1,7 @@
-import { app, shell, BrowserWindow, ipcMain, screen, Tray, Menu } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { attach, detach } from 'electron-as-wallpaper'
-import icon from '../../resources/icon.png?asset'
 import http from 'http'
 import crypto from 'crypto'
 import keytar from 'keytar'
@@ -67,6 +66,40 @@ function createWindow(): void {
     } else {
         mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     }
+}
+function initTray() {
+    let iconPath: string
+
+    if (app.isPackaged) {
+        iconPath = join(process.resourcesPath, 'resources/icon.png')
+    } else {
+        iconPath = join(__dirname, '../../resources/icon.png')
+    }
+    const image = nativeImage.createFromPath(iconPath)
+
+    if (image.isEmpty()) {
+        console.error('Failed to load tray icon. The image is empty.')
+        return
+    }
+
+    tray = new Tray(image)
+
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: '열기',
+            click: (): void => {
+                mainWindow?.show()
+            }
+        },
+        {
+            label: '종료',
+            click: (): void => {
+                app.quit()
+            }
+        }
+    ])
+    tray.setToolTip('미리내')
+    tray.setContextMenu(contextMenu)
 }
 
 const startAuthServer = (resolve: (code: string) => void, reject: (error: Error) => void) => {
@@ -234,24 +267,7 @@ app.whenReady().then(() => {
     })
 
     createWindow()
-    tray = new Tray(icon)
-
-    const contextMenu = Menu.buildFromTemplate([
-        {
-            label: '열기',
-            click: (): void => {
-                mainWindow?.show()
-            }
-        },
-        {
-            label: '종료',
-            click: (): void => {
-                app.quit()
-            }
-        }
-    ])
-    tray.setToolTip('미리내')
-    tray.setContextMenu(contextMenu)
+    initTray()
 
     app.on('activate', function () {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
