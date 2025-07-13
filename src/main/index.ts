@@ -100,6 +100,18 @@ function initTray() {
     ])
     tray.setToolTip('미리내')
     tray.setContextMenu(contextMenu)
+    tray.on('right-click', () => {
+        detach(mainWindow!)
+        tray!.popUpContextMenu(contextMenu)
+    })
+    contextMenu.on('menu-will-close', () => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            attach(mainWindow, {
+                forwardKeyboardInput: true,
+                forwardMouseInput: true
+            })
+        }
+    })
 }
 
 const startAuthServer = (resolve: (code: string) => void, reject: (error: Error) => void) => {
