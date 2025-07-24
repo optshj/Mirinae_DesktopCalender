@@ -82,7 +82,6 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
                         />
                     </div>
 
-                    {/* --- 추가: 시작 시간 및 종료 시간 선택 UI --- */}
                     <div className="flex items-center gap-4">
                         <div className="flex-1">
                             <label className="block text-sm font-medium" style={{ color: selectedColor }}>
@@ -91,7 +90,10 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
                             <input
                                 type="time"
                                 value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
+                                onChange={(e) => {
+                                    setStartTime(e.target.value)
+                                    setEndTime(e.target.value)
+                                }}
                                 className="text-primary mt-1 block w-full rounded-lg border border-zinc-300 p-2 focus:ring-0 focus:outline-none dark:saturate-70"
                                 style={{ borderColor: selectedColor }}
                             />
@@ -109,7 +111,6 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
                             />
                         </div>
                     </div>
-                    {/* ------------------------------------ */}
 
                     <div className="grid grid-cols-6 gap-2 px-2">
                         {colors &&
