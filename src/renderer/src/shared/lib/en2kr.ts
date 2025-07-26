@@ -32,7 +32,25 @@ const KOREAN_KEYMAP = {
     n: 'ㅜ',
     b: 'ㅠ',
     m: 'ㅡ',
-    l: 'ㅣ'
+    l: 'ㅣ',
+    A: 'ㅁ',
+    S: 'ㄴ',
+    D: 'ㅇ',
+    F: 'ㄹ',
+    G: 'ㅎ',
+    H: 'ㅗ',
+    J: 'ㅓ',
+    K: 'ㅏ',
+    L: 'ㅣ',
+    Z: 'ㅋ',
+    X: 'ㅌ',
+    C: 'ㅊ',
+    V: 'ㅍ',
+    B: 'ㅠ',
+    M: 'ㅡ',
+    Y: 'ㅛ',
+    U: 'ㅕ',
+    I: 'ㅑ'
 }
 
 export function convertEngToKor(key: string): string {
