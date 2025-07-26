@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react' // useCallback 추가
 import { ColorType } from '@/shared/types/EventTypes'
 import { useEditEvent } from '../api/useEditEvent'
 import HangulInput from '@/shared/ui/HangulInput'
@@ -22,25 +22,7 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
     const { tokens } = useLogin()
     const { addEvent, loading } = useEditEvent(tokens.access_token)
 
-    const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-        if (e.ctrlKey && e.key === 'Enter') {
-            e.preventDefault()
-            handleSubmit(e)
-        }
-    }
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.ctrlKey && e.key === 'Enter' && !showForm) {
-                setShowForm(true)
-            }
-        }
-        window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [])
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const performSubmit = useCallback(async () => {
         if (loading || !summary.trim()) return
 
         const [startHour, startMinute] = startTime.split(':').map(Number)
@@ -57,7 +39,34 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
         setShowForm(false)
         setSummary('')
         setColorId('1')
+    }, [loading, summary, startTime, endTime, date, addEvent, refresh, colorId])
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        await performSubmit()
     }
+
+    const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault()
+            handleSubmit(e)
+        }
+    }
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                if (showForm) {
+                    e.preventDefault()
+                    performSubmit()
+                } else {
+                    setShowForm(true)
+                }
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [showForm, performSubmit])
 
     return (
         <>
