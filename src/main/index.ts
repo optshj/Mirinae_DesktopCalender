@@ -1,11 +1,12 @@
 import { app, shell, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { attach, detach } from 'electron-as-wallpaper'
+import { attach, detach, reset } from 'electron-as-wallpaper'
 import http from 'http'
 import crypto from 'crypto'
 import keytar from 'keytar'
 import Store from 'electron-store'
+import { readFileSync } from 'fs'
 
 const SERVICE_NAME = 'mirinae'
 const ACCOUNT_NAME = 'google-refresh-token'
@@ -14,6 +15,8 @@ const CLIENT_ID = process.env.VITE_CLIENT_ID
 const CLIENT_SECRET = process.env.VITE_CLIENT_SECRET
 const REDIRECT_URI = 'http://localhost:5858/callback'
 const SCOPES = 'https://www.googleapis.com/auth/calendar'
+
+const successPage = readFileSync(join(__dirname, '../../resources/success.html'))
 
 let authServer: http.Server | null = null
 let mainWindow: BrowserWindow | null = null
@@ -47,7 +50,8 @@ function createWindow(): void {
         type: 'toolbar',
         webPreferences: {
             preload: join(__dirname, '../preload/index.js'),
-            sandbox: false
+            sandbox: false,
+            backgroundThrottling: false
         }
     })
 
@@ -125,7 +129,7 @@ const startAuthServer = (resolve: (code: string) => void, reject: (error: Error)
             const code = url.searchParams.get('code')
 
             if (code) {
-                res.end('<h3>Login Success!, You can Close this tab</h3>')
+                res.end(successPage)
                 resolve(code)
                 authServer?.close()
                 authServer = null
@@ -249,10 +253,25 @@ ipcMain.on('start-google-oauth', async (event) => {
 })
 ipcMain.on('quit-app', () => {
     app.quit()
+    reset()
 })
+let isAttached = false
+
 ipcMain.on('safe-reload', () => {
-    detach(mainWindow!)
-    mainWindow!.webContents.reload()
+    if (mainWindow) {
+        if (isAttached) {
+            detach(mainWindow)
+            isAttached = false
+        }
+        mainWindow.webContents.reload()
+        mainWindow.webContents.once('did-finish-load', () => {
+            attach(mainWindow!, {
+                forwardKeyboardInput: true,
+                forwardMouseInput: true
+            })
+            isAttached = true
+        })
+    }
 })
 ipcMain.on('start-dragging', () => {
     detach(mainWindow!)

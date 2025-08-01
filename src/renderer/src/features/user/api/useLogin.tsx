@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { initialTokens, Tokens } from '../types/userType'
 
 declare global {
     interface Window {
@@ -20,31 +21,16 @@ declare global {
         }
     }
 }
-
-interface Tokens {
-    access_token: string
-    refresh_token?: string
-    expires_in?: number
-    scope?: string
-    token_type?: string
-}
-const initialTokens: Tokens = {
-    access_token: '',
-    refresh_token: undefined,
-    expires_in: undefined,
-    scope: undefined,
-    token_type: undefined
-}
 export function useLogin() {
     const [tokens, setTokens] = useState<Tokens>(initialTokens)
 
-    const handleLogin = (receivedTokens) => {
+    const handleLogin = useCallback((receivedTokens) => {
         setTokens(receivedTokens)
-    }
+    }, [])
 
-    const handleError = (error) => {
+    const handleError = useCallback((error) => {
         console.error('OAuth Error:', error)
-    }
+    }, [])
 
     useEffect(() => {
         if (window.api.tryAutoLogin) {
