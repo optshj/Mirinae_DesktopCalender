@@ -26,7 +26,8 @@ export default [
         rules: {
             curly: 'off',
             'no-console': ['warn', { allow: ['warn', 'error'] }],
-            'react/react-in-jsx-scope': 'off', // 최신 React에서는 불필요
+            'react/react-in-jsx-scope': 'off',
+            '@typescript-eslint/no-explicit-any': 'off',
 
             // FSD 레이어 간 의존성 규칙
             'import/no-restricted-paths': [

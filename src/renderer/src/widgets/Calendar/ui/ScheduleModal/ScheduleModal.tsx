@@ -1,5 +1,5 @@
 import { useCalendarItems, useShowHoliday } from '@/features/event'
-import { AddEventForm, DeleteEventButton } from '@/features/edit'
+import { AddEventForm, DeleteEventButton } from '@/features/event'
 
 import { EventItem } from '@/entities/event'
 

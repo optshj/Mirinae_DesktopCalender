@@ -1,9 +1,10 @@
-import { useEffect, useState, useCallback } from 'react' // useCallback 추가
-import { ColorType } from '@/shared/types/EventTypes'
+import { useEffect, useState, useCallback } from 'react'
 import { useEditEvent } from '../api/useEditEvent'
-import HangulInput from '@/shared/ui/HangulInput'
 import { useLogin } from '@/features/user'
 import { useCalendarItems } from '@/features/event'
+
+import { ColorType } from '@/shared/types/EventTypes'
+import HangulInput from '@/shared/ui/HangulInput'
 
 interface AddEventFormProps {
     date: Date
@@ -13,11 +14,11 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
     const [summary, setSummary] = useState('')
     const [colorId, setColorId] = useState('1')
     const [showForm, setShowForm] = useState(false)
-
     const [startTime, setStartTime] = useState('09:00')
-    const [endTime, setEndTime] = useState('10:00')
+    const [endTime, setEndTime] = useState('09:00')
 
     const selectedColor = colors?.event?.[colorId]?.background || '#1F2937'
+
     const { refresh } = useCalendarItems()
     const { tokens } = useLogin()
     const { addEvent, loading } = useEditEvent(tokens.access_token)
@@ -25,15 +26,7 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
     const performSubmit = useCallback(async () => {
         if (loading || !summary.trim()) return
 
-        const [startHour, startMinute] = startTime.split(':').map(Number)
-        const startDateTime = new Date(date)
-        startDateTime.setHours(startHour, startMinute, 0, 0)
-
-        const [endHour, endMinute] = endTime.split(':').map(Number)
-        const endDateTime = new Date(date)
-        endDateTime.setHours(endHour, endMinute, 0, 0)
-
-        await addEvent(startDateTime, endDateTime, summary, colorId)
+        await addEvent(date, startTime, endTime, summary, colorId)
         await refresh()
 
         setShowForm(false)

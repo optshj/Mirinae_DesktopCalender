@@ -6,17 +6,23 @@ export function useEditEvent(access_token: string) {
     const isSubmitting = useRef(false)
 
     const addEvent = useCallback(
-        async (startTime: Date, endTime: Date, summary: string, colorId: string) => {
+        async (date: Date, startTime: string, endTime: string, summary: string, colorId: string) => {
             if (isSubmitting.current) return
+            const [startHour, startMinute] = startTime.split(':').map(Number)
+            const [endHour, endMinute] = endTime.split(':').map(Number)
+            const startDateTime = new Date(date)
+            const endDateTime = new Date(date)
+            startDateTime.setHours(startHour, startMinute, 0, 0)
+            endDateTime.setHours(endHour, endMinute, 0, 0)
             const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
             const eventData = {
                 summary: summary,
                 start: {
-                    dateTime: startTime.toISOString(),
+                    dateTime: startDateTime.toISOString(),
                     timeZone: timeZone
                 },
                 end: {
-                    dateTime: endTime.toISOString(),
+                    dateTime: endDateTime.toISOString(),
                     timeZone: timeZone
                 },
                 colorId: colorId || '1'

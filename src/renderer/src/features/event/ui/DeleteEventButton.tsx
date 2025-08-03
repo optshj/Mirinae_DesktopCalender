@@ -1,6 +1,6 @@
 import { useLogin } from '@/features/user/api/useLogin'
 import { BiTrashAlt } from 'react-icons/bi'
-import { useEditEvent } from '../api/useEditEvent'
+import { useEditEvent } from '../../event/api/useEditEvent'
 
 interface DeleteEventButtonProps {
     eventId: string

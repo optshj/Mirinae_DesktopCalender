@@ -16,8 +16,6 @@ const CLIENT_SECRET = process.env.VITE_CLIENT_SECRET
 const REDIRECT_URI = 'http://localhost:5858/callback'
 const SCOPES = 'https://www.googleapis.com/auth/calendar'
 
-const successPage = readFileSync(join(__dirname, '../../resources/success.html'))
-
 let authServer: http.Server | null = null
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
@@ -72,20 +70,8 @@ function createWindow(): void {
     }
 }
 function initTray() {
-    let iconPath: string
-
-    if (app.isPackaged) {
-        iconPath = join(process.resourcesPath, 'resources/icon.png')
-    } else {
-        iconPath = join(__dirname, '../../resources/icon.png')
-    }
+    const iconPath = app.isPackaged ? join(process.resourcesPath, 'resources/icon.png') : join(__dirname, '../../resources/icon.png')
     const image = nativeImage.createFromPath(iconPath)
-
-    if (image.isEmpty()) {
-        console.error('Failed to load tray icon. The image is empty.')
-        return
-    }
-
     tray = new Tray(image)
 
     const contextMenu = Menu.buildFromTemplate([
@@ -97,16 +83,15 @@ function initTray() {
         },
         {
             label: '종료',
-            click: (): void => {
-                app.quit()
-            }
+            role: 'quit'
         }
     ])
     tray.setToolTip('미리내')
     tray.setContextMenu(contextMenu)
-    tray.on('right-click', () => {
-        detach(mainWindow!)
-        tray!.popUpContextMenu(contextMenu)
+    contextMenu.on('menu-will-show', () => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            detach(mainWindow)
+        }
     })
     contextMenu.on('menu-will-close', () => {
         if (mainWindow && !mainWindow.isDestroyed()) {
@@ -119,6 +104,7 @@ function initTray() {
 }
 
 const startAuthServer = (resolve: (code: string) => void, reject: (error: Error) => void) => {
+    const successPath = app.isPackaged ? join(process.resourcesPath, 'resources', 'success.html') : join(__dirname, '../../resources/success.html')
     if (authServer) {
         authServer.close()
     }
@@ -129,7 +115,7 @@ const startAuthServer = (resolve: (code: string) => void, reject: (error: Error)
             const code = url.searchParams.get('code')
 
             if (code) {
-                res.end(successPage)
+                res.end(readFileSync(successPath))
                 resolve(code)
                 authServer?.close()
                 authServer = null
@@ -192,6 +178,7 @@ const refreshAccessToken = async (refresh_token: string) => {
         const data = await response.json()
         return data // { access_token, ... }
     } catch (error) {
+        console.error('Error refreshing access token:', error)
         throw new Error('Failed to refresh access token')
     }
 }
@@ -207,7 +194,7 @@ ipcMain.handle('try-auto-login', async () => {
         return tokenData
     } catch (err) {
         console.error('Auto-login failed:', err)
-        return null
+        throw new Error('Auto-login failed')
     }
 })
 ipcMain.handle('logout-google-oauth', async () => {
