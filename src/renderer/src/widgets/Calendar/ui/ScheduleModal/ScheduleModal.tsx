@@ -3,14 +3,10 @@ import { AddEventForm, DeleteEventButton } from '@/features/event'
 
 import { EventItem } from '@/entities/event'
 
-import Modal from '@/shared/ui/Modal'
 import { isSameDay } from '@/shared/lib/dateFunction'
+import { DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
 
-interface ScheduleModalProps {
-    date: Date
-    onClose: () => void
-}
-export function ScheduleModal({ date, onClose }: ScheduleModalProps) {
+export function ScheduleModal({ date }: { date: Date }) {
     const { items, holidayItems, colors } = useCalendarItems()
     const { isShow } = useShowHoliday()
     const events =
@@ -25,10 +21,12 @@ export function ScheduleModal({ date, onClose }: ScheduleModalProps) {
         }) ?? []
 
     return (
-        <Modal onClose={onClose}>
-            <div className="text-primary mb-2 text-lg font-bold" style={{ textAlign: 'center' }}>
-                {date.getMonth() + 1}월 {date.getDate()}일 일정
-            </div>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>
+                    {date.getMonth() + 1}월 {date.getDate()}일 일정
+                </DialogTitle>
+            </DialogHeader>
             {isShow &&
                 holidays.map((event) => (
                     <div
@@ -50,6 +48,6 @@ export function ScheduleModal({ date, onClose }: ScheduleModalProps) {
                 </div>
             ))}
             <AddEventForm date={date} colors={colors} />
-        </Modal>
+        </DialogContent>
     )
 }

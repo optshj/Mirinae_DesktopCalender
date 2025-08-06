@@ -142,7 +142,7 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
                 </form>
             ) : (
                 <button
-                    className="text-primary mt-2 w-full rounded-xl border-2 border-dashed border-zinc-300 py-3 text-center font-semibold"
+                    className="text-secondary mt-2 w-full rounded-xl border-2 border-dashed border-zinc-300 py-3 text-center font-semibold"
                     onClick={() => setShowForm(true)}
                     type="button"
                 >

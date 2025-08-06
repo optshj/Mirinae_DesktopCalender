@@ -4,13 +4,13 @@ import { isSameDay } from '@/shared/lib/dateFunction'
 import { useCalendarItems, useShowHoliday } from '@/features/event'
 import { ScheduleModal } from '../ScheduleModal/ScheduleModal'
 import { EventList } from '@/entities/event'
+import { Dialog, DialogTrigger } from '@/shared/ui/dialog'
 
 interface CalendarGridProps {
     days: Date[]
     month: number
 }
 export function CalendarGrid({ days, month }: CalendarGridProps) {
-    const [modalOpen, setModalOpen] = useState(false)
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
     const { items, holidayItems } = useCalendarItems()
@@ -18,12 +18,6 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
 
     const handleDateDoubleClick = (date: Date) => {
         setSelectedDate(date)
-        setModalOpen(true)
-    }
-
-    const closeModal = () => {
-        setModalOpen(false)
-        setSelectedDate(null)
     }
 
     return (
@@ -37,26 +31,30 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                     ))}
                 </div>
                 <div className="grid grid-cols-7">
-                    {days.map((date, i) => {
-                        const isCurrentMonth = date.getMonth() === month
-                        const isToday = isSameDay(new Date(), date)
-                        return (
-                            <div
-                                key={i}
-                                className={`border-primary flex h-28 w-full flex-col border py-1 ${isToday ? 'shadow-all' : ''}`}
-                                onDoubleClick={() => handleDateDoubleClick(date)}
-                            >
-                                <div className={`pl-2 font-semibold ${isCurrentMonth ? `${isToday ? 'text-main-color' : 'text-primary'}` : 'text-secondary'} `}>
-                                    {date.getDate()}
-                                </div>
-                                <EventList items={items} holidayItems={isShow ? holidayItems : null} date={date} />
-                            </div>
-                        )
-                    })}
+                    <Dialog>
+                        {days.map((date, i) => {
+                            const isCurrentMonth = date.getMonth() === month
+                            const isToday = isSameDay(new Date(), date)
+                            return (
+                                <DialogTrigger key={i}>
+                                    <div
+                                        className={`border-primary flex h-28 w-full flex-col border py-1 ${isToday ? 'shadow-all' : ''}`}
+                                        onClick={() => handleDateDoubleClick(date)}
+                                    >
+                                        <div
+                                            className={`px-2 text-left font-semibold ${isCurrentMonth ? `${isToday ? 'text-main-color' : 'text-primary'}` : 'text-secondary'} `}
+                                        >
+                                            {date.getDate()}
+                                        </div>
+                                        <EventList items={items} holidayItems={isShow ? holidayItems : null} date={date} />
+                                    </div>
+                                </DialogTrigger>
+                            )
+                        })}
+                        <ScheduleModal date={selectedDate!} />
+                    </Dialog>
                 </div>
             </div>
-
-            {modalOpen && selectedDate && <ScheduleModal onClose={closeModal} date={selectedDate} />}
         </>
     )
 }
