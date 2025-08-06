@@ -12,6 +12,7 @@ interface CalendarGridProps {
 export function CalendarGrid({ days, month }: CalendarGridProps) {
     const [modalOpen, setModalOpen] = useState(false)
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+
     const { items, holidayItems } = useCalendarItems()
     const { isShow } = useShowHoliday()
 
@@ -36,12 +37,12 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                     ))}
                 </div>
                 <div className="grid grid-cols-7">
-                    {days.map((date, idx) => {
+                    {days.map((date, i) => {
                         const isCurrentMonth = date.getMonth() === month
                         const isToday = isSameDay(new Date(), date)
                         return (
                             <div
-                                key={idx}
+                                key={i}
                                 className={`border-primary flex h-28 w-full flex-col border py-1 ${isToday ? 'shadow-all' : ''}`}
                                 onDoubleClick={() => handleDateDoubleClick(date)}
                             >

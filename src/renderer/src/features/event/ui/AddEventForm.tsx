@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useEditEvent } from '../api/useEditEvent'
-import { useLogin } from '@/features/user'
 import { useCalendarItems } from '@/features/event'
 
 import { ColorType } from '@/shared/types/EventTypes'
@@ -20,8 +19,7 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
     const selectedColor = colors?.event?.[colorId]?.background || '#1F2937'
 
     const { refresh } = useCalendarItems()
-    const { tokens } = useLogin()
-    const { addEvent, loading } = useEditEvent(tokens.access_token)
+    const { addEvent, loading } = useEditEvent()
 
     const performSubmit = useCallback(async () => {
         if (loading || !summary.trim()) return

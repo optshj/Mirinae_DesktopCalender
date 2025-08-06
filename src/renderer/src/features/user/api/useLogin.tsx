@@ -3,24 +3,10 @@ import { initialTokens, Tokens } from '../types/userType'
 
 declare global {
     interface Window {
-        api: {
-            startGoogleOauth: () => void
-            onGoogleOauthSuccess: (callback: (token: any) => void) => void
-            onGoogleOauthError: (callback: (error: any) => void) => void
-            removeListeners: () => void
-            tryAutoLogin?: () => Promise<any>
-            logoutGoogleOAuth?: () => Promise<void>
-            mouseEnter: () => void
-            mouseLeave: () => void
-            safeReload: () => void
-            startDragging: () => void
-            stopDragging: () => void
-            quitApp: () => void
-            setOpacity: (opacity: number) => void
-            getInitialOpacity: () => number
-        }
+        api: any
     }
 }
+
 export function useLogin() {
     const [tokens, setTokens] = useState<Tokens>(initialTokens)
 

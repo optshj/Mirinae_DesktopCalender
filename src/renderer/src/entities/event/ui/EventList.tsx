@@ -14,26 +14,16 @@ export function EventList({ items, holidayItems, date }: { items: EventItemWithC
             return isSameDay(new Date(item.start.date), date)
         })
         .slice(0, 3)
+    const result = [...(holidays || []), ...(events || [])]
     return (
         <>
-            {holidays?.map((event, i) => (
+            {result.map((event, i) => (
                 <div
                     key={i}
                     style={{
                         background: event.color.background
                     }}
-                    className="text-depend mx-2 mt-1 flex items-center overflow-hidden rounded-lg px-2 py-1 text-start text-sm dark:saturate-70"
-                >
-                    {event.summary}
-                </div>
-            ))}
-            {events?.map((event, i) => (
-                <div
-                    key={i}
-                    style={{
-                        background: event.color.background
-                    }}
-                    className="text-depend mx-2 mt-1 flex items-center overflow-hidden rounded-lg px-2 py-1 text-start text-sm dark:saturate-70"
+                    className="text-depend mx-2 mt-1 flex items-center overflow-hidden rounded-lg px-2 py-1 text-sm dark:saturate-70"
                 >
                     {formatDateTIme(event.start)} {event.summary}
                 </div>

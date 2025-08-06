@@ -8,7 +8,7 @@ export function useDate() {
     const firstDayOfMonth = new Date(year, month, 1)
     const startDayOfWeek = firstDayOfMonth.getDay()
 
-    const calendarStartDate = new Date(year, month, 1 - startDayOfWeek) //1일이 속한 주 일요일로부터 시작
+    const calendarStartDate = new Date(year, month, 1 - startDayOfWeek)
     const days: Date[] = []
     for (let i = 0; i < 42; i++) {
         const date = new Date(calendarStartDate)

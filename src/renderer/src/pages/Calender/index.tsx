@@ -1,6 +1,6 @@
 import { useDate } from '@/shared/lib/useDate'
 
-import { useFlipCalendar } from '@/features/flip/model/FlipCalendarContext'
+import { useFlipCalendar } from '@/features/flip'
 
 import { Header } from '@/widgets/Header'
 import { Footer } from '@/widgets/Footer'

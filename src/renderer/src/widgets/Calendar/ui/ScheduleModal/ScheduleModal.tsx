@@ -23,7 +23,6 @@ export function ScheduleModal({ date, onClose }: ScheduleModalProps) {
             if (!item.start.date) return false
             return isSameDay(new Date(item.start.date), date)
         }) ?? []
-    const { refresh } = useCalendarItems()
 
     return (
         <Modal onClose={onClose}>
@@ -47,7 +46,7 @@ export function ScheduleModal({ date, onClose }: ScheduleModalProps) {
                     style={{ background: event.color.background }}
                 >
                     <EventItem event={event} />
-                    <DeleteEventButton eventId={event.id} onSuccess={refresh} />
+                    <DeleteEventButton eventId={event.id} />
                 </div>
             ))}
             <AddEventForm date={date} colors={colors} />

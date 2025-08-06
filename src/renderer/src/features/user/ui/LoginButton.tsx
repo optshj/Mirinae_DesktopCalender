@@ -5,11 +5,11 @@ export function LoginButton() {
     return (
         <>
             {tokens.access_token ? (
-                <div onClick={logout} className="cursor-pointer rounded px-2 py-1">
+                <div onClick={logout} className="rounded px-2 py-1">
                     로그아웃
                 </div>
             ) : (
-                <div onClick={login} className="cursor-pointer rounded px-2 py-1">
+                <div onClick={login} className="rounded px-2 py-1">
                     구글 로그인
                 </div>
             )}

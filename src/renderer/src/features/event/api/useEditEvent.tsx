@@ -1,6 +1,8 @@
+import { useLogin } from '@/features/user'
 import { useCallback, useRef, useState } from 'react'
 
-export function useEditEvent(access_token: string) {
+export function useEditEvent() {
+    const { tokens } = useLogin()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<Error | null>(null)
     const isSubmitting = useRef(false)
@@ -35,7 +37,7 @@ export function useEditEvent(access_token: string) {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${access_token}`
+                        Authorization: `Bearer ${tokens.access_token}`
                     },
                     body: JSON.stringify(eventData)
                 })
@@ -52,7 +54,7 @@ export function useEditEvent(access_token: string) {
                 setLoading(false)
             }
         },
-        [access_token]
+        [tokens]
     )
 
     const deleteEvent = useCallback(
@@ -63,7 +65,7 @@ export function useEditEvent(access_token: string) {
                 const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${eventId}`, {
                     method: 'DELETE',
                     headers: {
-                        Authorization: `Bearer ${access_token}`
+                        Authorization: `Bearer ${tokens.access_token}`
                     }
                 })
                 if (!response.ok) throw new Error('Failed to delete event')
@@ -75,7 +77,7 @@ export function useEditEvent(access_token: string) {
                 setLoading(false)
             }
         },
-        [access_token]
+        [tokens]
     )
 
     return { addEvent, deleteEvent, loading, error }

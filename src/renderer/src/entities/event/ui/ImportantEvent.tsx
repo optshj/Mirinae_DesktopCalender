@@ -1,6 +1,6 @@
+import { useMemo } from 'react'
 import { formatDate } from '@/shared/lib/dateFunction'
 import { EventItemWithColor } from '@/shared/types/EventTypes'
-import { useMemo } from 'react'
 
 export function ImportantEvent({ items }: { items: EventItemWithColor[] | null }) {
     const upcoming = useMemo(() => {
