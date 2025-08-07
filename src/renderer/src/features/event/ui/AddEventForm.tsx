@@ -2,14 +2,13 @@ import { useEffect, useState, useCallback } from 'react'
 import { useEditEvent } from '../api/useEditEvent'
 import { useCalendarItems } from '@/features/event'
 
-import { ColorType } from '@/shared/types/EventTypes'
 import HangulInput from '@/shared/ui/HangulInput'
+import { getColorById, getPalette } from '../utils/getColor'
 
 interface AddEventFormProps {
     date: Date
-    colors: ColorType | null
 }
-export function AddEventForm({ date, colors }: AddEventFormProps) {
+export function AddEventForm({ date }: AddEventFormProps) {
     const [summary, setSummary] = useState('')
     const [colorId, setColorId] = useState('1')
     const [showForm, setShowForm] = useState(false)
@@ -17,7 +16,8 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
     const [endTime, setEndTime] = useState('09:00')
     const [timeError, setTimeError] = useState('')
 
-    const selectedColor = colors?.event?.[colorId]?.background || '#1F2937'
+    const selectedColor = getColorById(colorId).background
+    const palette = getPalette()
 
     const { refresh } = useCalendarItems()
     const { addEvent, loading } = useEditEvent()
@@ -123,8 +123,8 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
                     </div>
 
                     <div className="grid grid-cols-6 gap-2 px-2">
-                        {colors &&
-                            Object.entries(colors.event).map(([key, color]) => (
+                        {palette &&
+                            Object.entries(palette).map(([key, color]) => (
                                 <div
                                     key={key}
                                     className="inline-block h-6 w-6 cursor-pointer rounded-full dark:saturate-70"

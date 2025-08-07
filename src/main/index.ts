@@ -297,3 +297,7 @@ app.on('window-all-closed', () => {
         app.quit()
     }
 })
+
+app.setLoginItemSettings({
+    openAtLogin: true // 윈도우 로그인 시 자동 실행 설정
+})

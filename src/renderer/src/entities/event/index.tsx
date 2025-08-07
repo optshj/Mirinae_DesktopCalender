@@ -1,5 +1,3 @@
 export { EventList } from './ui/EventList'
 export { ModalEventList } from './ui/ModalEventList'
-export { TodayEvent } from './ui/TodayEvent'
-export { UpcomingEvent } from './ui/UpcomingEvent'
-export { ImportantEvent } from './ui/ImportantEvent'
+export { FooterEvent } from './ui/FooterEvent'

@@ -7,7 +7,7 @@ import { isSameDay } from '@/shared/lib/dateFunction'
 import { DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
 
 export function ScheduleModal({ date }: { date: Date }) {
-    const { items, holidayItems, colors } = useCalendarItems()
+    const { items, holidayItems } = useCalendarItems()
     const { isShow } = useShowHoliday()
     const events =
         items?.filter((item) => {
@@ -31,7 +31,7 @@ export function ScheduleModal({ date }: { date: Date }) {
             {events.map((event) => (
                 <ModalEventList key={event.id} event={event} deleteButton={<DeleteEventButton eventId={event.id} />} />
             ))}
-            <AddEventForm date={date} colors={colors} />
+            <AddEventForm date={date} />
         </DialogContent>
     )
 }
