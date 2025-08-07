@@ -11,7 +11,7 @@ interface CalendarGridProps {
     month: number
 }
 export function CalendarGrid({ days, month }: CalendarGridProps) {
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date())
 
     const { items, holidayItems } = useCalendarItems()
     const { isShow } = useShowHoliday()

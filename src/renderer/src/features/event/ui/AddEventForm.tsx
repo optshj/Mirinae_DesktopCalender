@@ -15,6 +15,7 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
     const [showForm, setShowForm] = useState(false)
     const [startTime, setStartTime] = useState('09:00')
     const [endTime, setEndTime] = useState('09:00')
+    const [timeError, setTimeError] = useState('')
 
     const selectedColor = colors?.event?.[colorId]?.background || '#1F2937'
 
@@ -22,7 +23,17 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
     const { addEvent, loading } = useEditEvent()
 
     const performSubmit = useCallback(async () => {
-        if (loading || !summary.trim()) return
+        if (loading) return
+        if (!summary.trim()) {
+            setTimeError('일정 제목을 입력해주세요')
+            return
+        }
+        if (endTime < startTime) {
+            setTimeError('종료시간은 시작시간 이후여야 합니다')
+            return
+        } else {
+            setTimeError('')
+        }
 
         await addEvent(date, startTime, endTime, summary, colorId)
         await refresh()
@@ -65,7 +76,7 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
                 <form
                     onSubmit={handleSubmit}
                     onKeyDown={handleFormKeyDown}
-                    className="mt-2 flex flex-col gap-3 rounded-xl border p-4 dark:saturate-70"
+                    className="flex flex-col gap-4 rounded-xl border p-4 dark:saturate-70"
                     style={{ borderColor: selectedColor }}
                 >
                     <div className="flex flex-col gap-1">
@@ -76,7 +87,6 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
                             type="text"
                             value={summary}
                             onChange={(newSummary) => setSummary(newSummary)}
-                            required
                             autoFocus
                             style={{ borderColor: selectedColor }}
                         />
@@ -123,21 +133,24 @@ export function AddEventForm({ date, colors }: AddEventFormProps) {
                                 />
                             ))}
                     </div>
-                    <div className="mt-2 flex gap-2">
-                        <button
-                            type="submit"
-                            className="flex-1 rounded-lg px-3 py-2 font-semibold text-white shadow dark:saturate-70"
-                            style={{ backgroundColor: selectedColor }}
-                        >
-                            추가
-                        </button>
-                        <button
-                            type="button"
-                            className="flex-1 rounded-lg border border-zinc-300 bg-zinc-100 px-3 py-2 font-semibold text-zinc-500"
-                            onClick={() => setShowForm(false)}
-                        >
-                            취소
-                        </button>
+                    <div className="mt-2 flex items-center justify-between gap-2">
+                        <div className="flex-shrink-0">{timeError && <div className="animate-shake text-xs text-red-500">{timeError}</div>}</div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                className="rounded-lg border border-zinc-300 bg-zinc-100 px-6 py-1.5 font-semibold whitespace-nowrap text-zinc-500"
+                                onClick={() => setShowForm(false)}
+                            >
+                                취소
+                            </button>
+                            <button
+                                type="submit"
+                                className="rounded-lg px-6 py-1.5 font-semibold whitespace-nowrap text-white dark:saturate-70"
+                                style={{ backgroundColor: selectedColor }}
+                            >
+                                추가
+                            </button>
+                        </div>
                     </div>
                 </form>
             ) : (

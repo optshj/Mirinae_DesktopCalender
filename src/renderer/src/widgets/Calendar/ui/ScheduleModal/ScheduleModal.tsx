@@ -1,7 +1,7 @@
 import { useCalendarItems, useShowHoliday } from '@/features/event'
 import { AddEventForm, DeleteEventButton } from '@/features/event'
 
-import { EventItem } from '@/entities/event'
+import { ModalEventList } from '@/entities/event'
 
 import { isSameDay } from '@/shared/lib/dateFunction'
 import { DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
@@ -27,25 +27,9 @@ export function ScheduleModal({ date }: { date: Date }) {
                     {date.getMonth() + 1}월 {date.getDate()}일 일정
                 </DialogTitle>
             </DialogHeader>
-            {isShow &&
-                holidays.map((event) => (
-                    <div
-                        key={event.id}
-                        className="text-depend mb-2 flex items-center justify-between rounded-xl p-3 dark:saturate-70"
-                        style={{ background: event.color.background }}
-                    >
-                        <EventItem event={event} />
-                    </div>
-                ))}
+            {isShow && holidays.map((event) => <ModalEventList key={event.id} event={event} />)}
             {events.map((event) => (
-                <div
-                    key={event.id}
-                    className="text-depend mb-2 flex items-center justify-between rounded-xl p-3 dark:saturate-70"
-                    style={{ background: event.color.background }}
-                >
-                    <EventItem event={event} />
-                    <DeleteEventButton eventId={event.id} />
-                </div>
+                <ModalEventList key={event.id} event={event} deleteButton={<DeleteEventButton eventId={event.id} />} />
             ))}
             <AddEventForm date={date} colors={colors} />
         </DialogContent>

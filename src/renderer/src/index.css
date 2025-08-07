@@ -9,6 +9,30 @@
     --color-bg-gray: #f3f4f6;
     --color-main-color: #a4bdfc;
     --shadow-all: 0 0 12px 2px #a4bdfc;
+    --animate-shake: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+    15% {
+        transform: translateX(-4px);
+    }
+    30% {
+        transform: translateX(4px);
+    }
+    45% {
+        transform: translateX(-4px);
+    }
+    60% {
+        transform: translateX(4px);
+    }
+    75% {
+        transform: translateX(-2px);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
 
 @layer base {
