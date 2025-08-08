@@ -1,7 +1,7 @@
-import { useUser } from '@/features/user/model/UserContext'
+import { useLogin } from '../api/useLogin'
 
 export function LoginButton() {
-    const { tokens, login, logout } = useUser()
+    const { login, logout, tokens } = useLogin()
     return (
         <>
             {tokens.access_token ? (

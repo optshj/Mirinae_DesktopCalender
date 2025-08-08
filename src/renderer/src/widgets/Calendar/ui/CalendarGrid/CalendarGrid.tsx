@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { isSameDay } from '@/shared/lib/dateFunction'
 
-import { useCalendarItems, useShowHoliday } from '@/features/event'
+import { useCalendarItems } from '@/features/event'
 import { ScheduleModal } from '../ScheduleModal/ScheduleModal'
 import { EventList } from '@/entities/event'
 import { Dialog, DialogTrigger } from '@/shared/ui/dialog'
@@ -13,8 +13,7 @@ interface CalendarGridProps {
 export function CalendarGrid({ days, month }: CalendarGridProps) {
     const [selectedDate, setSelectedDate] = useState<Date>(new Date())
 
-    const { items, holidayItems } = useCalendarItems()
-    const { isShow } = useShowHoliday()
+    const { items } = useCalendarItems()
 
     const handleDateDoubleClick = (date: Date) => {
         setSelectedDate(date)
@@ -46,7 +45,7 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                                         >
                                             {date.getDate()}
                                         </div>
-                                        <EventList items={items} holidayItems={isShow ? holidayItems : null} date={date} />
+                                        <EventList items={items} date={date} />
                                     </div>
                                 </DialogTrigger>
                             )

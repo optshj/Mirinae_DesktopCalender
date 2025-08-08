@@ -1,23 +1,16 @@
 import { formatDateTIme, isSameDay } from '@/shared/lib/dateFunction'
 import { EventItemWithColor } from '@/shared/types/EventTypes'
 
-export function EventList({ items, holidayItems, date }: { items: EventItemWithColor[] | null; holidayItems: EventItemWithColor[] | null; date: Date }) {
-    const events = items
-        ?.filter((item) => {
-            if (!item.start.dateTime) return false
-            return isSameDay(new Date(item.start.dateTime), date)
-        })
-        .slice(0, 3)
-    const holidays = holidayItems
-        ?.filter((item) => {
-            if (!item.start.date) return false
-            return isSameDay(new Date(item.start.date), date)
-        })
-        .slice(0, 3)
-    const result = [...(holidays || []), ...(events || [])]
+export function EventList({ items, date }: { items: EventItemWithColor[] | null; date: Date }) {
+    const events =
+        items?.filter((item) => {
+            if (!item.start.dateTime && !item.start.date) return false
+            const eventDate = item.start.dateTime ? new Date(item.start.dateTime) : new Date(item.start.date)
+            return isSameDay(eventDate, date)
+        }) ?? [].slice(0, 3)
     return (
         <>
-            {result.map((event, i) => (
+            {events.map((event, i) => (
                 <div
                     key={i}
                     style={{

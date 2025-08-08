@@ -17,10 +17,6 @@ export function useGoogleCalendar(access_token: string) {
                     method: 'GET',
                     headers: { Authorization: `Bearer ${access_token}` }
                 }),
-                fetch('https://www.googleapis.com/calendar/v3/colors', {
-                    method: 'GET',
-                    headers: { Authorization: `Bearer ${access_token}` }
-                }),
                 fetch(' https://www.googleapis.com/calendar/v3/calendars/ko.south_korea%23holiday%40group.v.calendar.google.com/events?maxResults=2500', {
                     method: 'GET',
                     headers: { Authorization: `Bearer ${access_token}` }

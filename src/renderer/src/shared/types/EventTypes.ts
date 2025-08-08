@@ -171,22 +171,6 @@ export interface EventItem {
     }
     eventType: string
 }
-export interface ColorType {
-    kind: 'calendar#colors'
-    updated: string
-    calendar: {
-        (key: string): {
-            background: string
-            foreground: string
-        }
-    }
-    event: {
-        (key: string): {
-            background: string
-            foreground: string
-        }
-    }
-}
 
 export interface EventItemWithColor extends EventItem {
     color: {

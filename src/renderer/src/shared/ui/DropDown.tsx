@@ -26,14 +26,12 @@ export default function DropDown({ trigger, children, align = 'left' }: DropDown
 
     return (
         <div className="relative inline-block" ref={menuRef}>
-            <div onClick={() => setOpen((v) => !v)} className="cursor-pointer select-none">
-                {trigger}
+            <div onClick={() => setOpen((v) => !v)}>{trigger}</div>
+            <div
+                className={`bg-primary absolute z-50 mt-2 min-w-[160px] rounded-xl p-2 shadow-lg ${align === 'right' ? 'right-0' : 'left-0'} ${open ? 'block' : 'hidden'}`}
+            >
+                {children}
             </div>
-            {open && (
-                <div className={`bg-primary absolute z-50 mt-2 min-w-[160px] rounded-xl p-2 shadow-lg ${align === 'right' ? 'right-0' : 'left-0'}`}>
-                    {children}
-                </div>
-            )}
         </div>
     )
 }

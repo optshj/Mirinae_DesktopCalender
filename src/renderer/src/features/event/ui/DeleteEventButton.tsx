@@ -1,4 +1,4 @@
-import { BiTrashAlt } from 'react-icons/bi'
+import { AiFillDelete } from 'react-icons/ai'
 import { useEditEvent } from '../../event/api/useEditEvent'
 import { useCalendarItems } from '../model/CalendarItemsContext'
 
@@ -16,8 +16,8 @@ export function DeleteEventButton({ eventId }: DeleteEventButtonProps) {
     }
 
     return (
-        <button onClick={handleDelete} disabled={loading} className="text-base text-red-300">
-            <BiTrashAlt className="text-lg" />
+        <button onClick={handleDelete} disabled={loading} className="text-base">
+            <AiFillDelete className="text-lg" />
         </button>
     )
 }
