@@ -37,7 +37,7 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                             return (
                                 <DialogTrigger key={i}>
                                     <div
-                                        className={`border-primary flex h-28 w-full flex-col border py-1 ${isToday ? 'shadow-all' : ''}`}
+                                        className={`border-primary flex h-28 w-full flex-col overflow-hidden border py-1 ${isToday ? 'shadow-all' : ''}`}
                                         onClick={() => handleDateDoubleClick(date)}
                                     >
                                         <div

@@ -7,16 +7,16 @@ export function EventList({ items, date }: { items: EventItemWithColor[] | null;
             if (!item.start.dateTime && !item.start.date) return false
             const eventDate = item.start.dateTime ? new Date(item.start.dateTime) : new Date(item.start.date)
             return isSameDay(eventDate, date)
-        }) ?? [].slice(0, 3)
+        }) ?? []
     return (
         <>
-            {events.map((event, i) => (
+            {events.slice(0, 4).map((event, i) => (
                 <div
                     key={i}
                     style={{
                         background: event.color.background
                     }}
-                    className="text-depend mx-2 mt-1 flex items-center overflow-hidden rounded-lg px-2 py-1 text-sm dark:saturate-70"
+                    className="text-depend mx-2 mt-1 flex items-center truncate overflow-hidden rounded-lg px-2 py-1 text-sm dark:saturate-70"
                 >
                     {formatDateTIme(event.start)} {event.summary}
                 </div>

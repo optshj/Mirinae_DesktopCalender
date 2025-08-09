@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { initialTokens, Tokens } from '../types/userType'
 
-declare global {
-    interface Window {
-        api: any
-    }
-}
-
 export function useLogin() {
     const [tokens, setTokens] = useState<Tokens>(initialTokens)
 

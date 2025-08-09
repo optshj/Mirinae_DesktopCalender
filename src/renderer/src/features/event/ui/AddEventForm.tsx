@@ -1,6 +1,5 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { useEditEvent } from '../api/useEditEvent'
-import { useCalendarItems } from '@/features/event'
 
 import HangulInput from '@/shared/ui/HangulInput'
 import { getColorById, getPalette } from '../utils/getColor'
@@ -19,11 +18,9 @@ export function AddEventForm({ date }: AddEventFormProps) {
     const selectedColor = getColorById(colorId).background
     const palette = getPalette()
 
-    const { refresh } = useCalendarItems()
-    const { addEvent, loading } = useEditEvent()
+    const { addEvent } = useEditEvent()
 
-    const performSubmit = useCallback(async () => {
-        if (loading) return
+    const performSubmit = () => {
         if (!summary.trim()) {
             setTimeError('일정 제목을 입력해주세요')
             return
@@ -35,17 +32,16 @@ export function AddEventForm({ date }: AddEventFormProps) {
             setTimeError('')
         }
 
-        await addEvent(date, startTime, endTime, summary, colorId)
-        await refresh()
+        addEvent({ date, startTime, endTime, summary, colorId })
+    }
 
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
         setShowForm(false)
+
+        performSubmit()
         setSummary('')
         setColorId('1')
-    }, [loading, summary, startTime, endTime, date, addEvent, refresh, colorId])
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        await performSubmit()
     }
 
     const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {

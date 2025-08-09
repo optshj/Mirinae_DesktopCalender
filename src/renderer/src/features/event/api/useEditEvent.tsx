@@ -1,15 +1,27 @@
 import { useLogin } from '@/features/user'
-import { useCallback, useRef, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { EventItemWithColor } from '../../../shared/types/EventTypes'
+import { getColorById } from '../utils/getColor'
 
 export function useEditEvent() {
     const { tokens } = useLogin()
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<Error | null>(null)
-    const isSubmitting = useRef(false)
+    const queryClient = useQueryClient()
 
-    const addEvent = useCallback(
-        async (date: Date, startTime: string, endTime: string, summary: string, colorId: string) => {
-            if (isSubmitting.current) return
+    const addEventMutation = useMutation({
+        mutationKey: ['addEvent'],
+        mutationFn: async ({
+            date,
+            startTime,
+            endTime,
+            summary,
+            colorId
+        }: {
+            date: Date
+            startTime: string
+            endTime: string
+            summary: string
+            colorId: string
+        }) => {
             const [startHour, startMinute] = startTime.split(':').map(Number)
             const [endHour, endMinute] = endTime.split(':').map(Number)
             const startDateTime = new Date(date)
@@ -17,68 +29,95 @@ export function useEditEvent() {
             startDateTime.setHours(startHour, startMinute, 0, 0)
             endDateTime.setHours(endHour, endMinute, 0, 0)
             const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
             const eventData = {
-                summary: summary,
-                start: {
-                    dateTime: startDateTime.toISOString(),
-                    timeZone: timeZone
-                },
-                end: {
-                    dateTime: endDateTime.toISOString(),
-                    timeZone: timeZone
-                },
+                summary,
+                start: { dateTime: startDateTime.toISOString(), timeZone },
+                end: { dateTime: endDateTime.toISOString(), timeZone },
                 colorId: colorId || '1'
             }
-            try {
-                isSubmitting.current = true
-                setLoading(true)
-                setError(null)
-                const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${tokens.access_token}`
-                    },
-                    body: JSON.stringify(eventData)
-                })
 
-                if (!response.ok) {
-                    throw new Error('Failed to add event')
+            const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${tokens.access_token}`
+                },
+                body: JSON.stringify(eventData)
+            })
+
+            return response.json()
+        },
+        onMutate: async (newEvent) => {
+            await queryClient.cancelQueries({ queryKey: ['googleCalendarEvents'] })
+            const previousData = queryClient.getQueryData<{
+                items: EventItemWithColor[]
+            }>(['googleCalendarEvents'])
+
+            const newEventItem = {
+                id: 'temp-id-' + Date.now(),
+                kind: 'calendar#event',
+                etag: '',
+                status: 'confirmed',
+                summary: newEvent.summary,
+                start: {
+                    dateTime: new Date(newEvent.date).toISOString(),
+                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                },
+                end: {
+                    dateTime: new Date(newEvent.date).toISOString(),
+                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                },
+                colorId: newEvent.colorId || '1',
+                color: getColorById(newEvent.colorId || '1')
+            }
+
+            if (previousData) {
+                queryClient.setQueryData(['googleCalendarEvents'], {
+                    items: [newEventItem, ...previousData.items]
+                })
+            }
+
+            return { previousData }
+        },
+        onError: (_err, _variables, context: any) => queryClient.setQueryData(['googleCalendarEvents'], context.previousData),
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ['googleCalendarEvents'] })
+    })
+
+    const deleteEventMutation = useMutation({
+        mutationKey: ['deleteEvent'],
+        mutationFn: async (eventId: string) => {
+            const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${eventId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${tokens.access_token}`
                 }
+            })
 
-                return await response.json()
-            } catch (err: any) {
-                setError(err)
-            } finally {
-                isSubmitting.current = false
-                setLoading(false)
-            }
+            if (!response.ok) throw new Error('Failed to delete event')
+            return eventId
         },
-        [tokens]
-    )
+        onMutate: async (eventId) => {
+            await queryClient.cancelQueries({ queryKey: ['googleCalendarEvents'] })
+            const previousData = queryClient.getQueryData<{
+                items: EventItemWithColor[]
+            }>(['googleCalendarEvents'])
 
-    const deleteEvent = useCallback(
-        async (eventId: string) => {
-            setLoading(true)
-            setError(null)
-            try {
-                const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${eventId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: `Bearer ${tokens.access_token}`
-                    }
+            if (previousData) {
+                queryClient.setQueryData(['googleCalendarEvents'], {
+                    ...previousData,
+                    items: previousData.items.filter((event) => event.id !== eventId)
                 })
-                if (!response.ok) throw new Error('Failed to delete event')
-                return true
-            } catch (err: any) {
-                setError(err)
-                return false
-            } finally {
-                setLoading(false)
             }
+            return { previousData }
         },
-        [tokens]
-    )
+        onError: (_error, _variable, context: any) => queryClient.setQueryData(['googleCalendarEvents'], context.previousData),
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ['googleCalendarEvents'] })
+    })
 
-    return { addEvent, deleteEvent, loading, error }
+    return {
+        addEvent: addEventMutation.mutate,
+        deleteEvent: deleteEventMutation.mutate,
+        error: addEventMutation.error || deleteEventMutation.error
+    }
 }

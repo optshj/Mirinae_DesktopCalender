@@ -28,8 +28,8 @@ export interface EventItem {
         timeZone: string
     }
     end: {
-        date: Date
-        dateTime: Date
+        date: string
+        dateTime: string
         timeZone: string
     }
     endTimeUnspecified: boolean

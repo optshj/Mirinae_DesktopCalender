@@ -1,50 +1,52 @@
-import { useEffect, useState, useCallback } from 'react'
 import { EventItem, EventItemWithColor } from '../../../shared/types/EventTypes'
 import { getColorById } from '../utils/getColor'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useGoogleCalendar(access_token: string) {
-    const [items, setItems] = useState<EventItemWithColor[] | null>(null)
-    const [holidayItems, setHolidayItems] = useState<EventItemWithColor[] | null>(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<Error | null>(null)
+    const queryClient = useQueryClient()
 
-    const fetchAll = useCallback(async () => {
-        setLoading(true)
-        setError(null)
-        try {
-            const [eventRes, holidays] = await Promise.all([
-                fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=2500', {
-                    method: 'GET',
-                    headers: { Authorization: `Bearer ${access_token}` }
-                }),
-                fetch(' https://www.googleapis.com/calendar/v3/calendars/ko.south_korea%23holiday%40group.v.calendar.google.com/events?maxResults=2500', {
-                    method: 'GET',
-                    headers: { Authorization: `Bearer ${access_token}` }
-                })
-            ])
-            const eventData = await eventRes.json()
-            const holidayData = await holidays.json()
+    const { data: eventData, isLoading: eventLoading } = useQuery({
+        queryKey: ['googleCalendarEvents'],
+        queryFn: async () => {
+            const res = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=2500', {
+                headers: { Authorization: `Bearer ${access_token}` }
+            }).then((res) => res.json())
+            return res
+        },
+        enabled: !!access_token
+    })
 
-            const eventList: EventItemWithColor[] = (eventData.items || []).map((event: EventItem) => {
-                const color = getColorById(event.colorId)
-                return { ...event, color }
-            })
-            const holidayList: EventItemWithColor[] = (holidayData.items || []).map((event: EventItem) => {
-                const color = getColorById('10') // green color for holidays
-                return { ...event, color }
-            })
-            setHolidayItems(holidayList)
-            setItems(eventList)
-        } catch (err: any) {
-            setError(err)
-        } finally {
-            setLoading(false)
-        }
-    }, [access_token])
+    const { data: holidayData, isLoading: holidayLoading } = useQuery({
+        queryKey: ['googleCalendarHolidays'],
+        queryFn: async () => {
+            const res = await fetch(
+                'https://www.googleapis.com/calendar/v3/calendars/ko.south_korea%23holiday%40group.v.calendar.google.com/events?maxResults=2500',
+                { headers: { Authorization: `Bearer ${access_token}` } }
+            ).then((res) => res.json())
+            return res
+        },
+        enabled: !!access_token
+    })
 
-    useEffect(() => {
-        if (access_token) fetchAll()
-    }, [access_token, fetchAll])
+    const items: EventItemWithColor[] = (eventData?.items ?? []).map((event: EventItem) => {
+        const color = getColorById(event.colorId)
+        return { ...event, color }
+    })
 
-    return { items, holidayItems, loading, error, refresh: fetchAll }
+    const holidayItems: EventItemWithColor[] = (holidayData?.items ?? []).map((event: EventItem) => {
+        const color = getColorById('10')
+        return { ...event, color }
+    })
+
+    const refresh = async () => {
+        await queryClient.invalidateQueries({ queryKey: ['googleCalendarEvents'] })
+        await queryClient.invalidateQueries({ queryKey: ['googleCalendarHolidays'] })
+    }
+
+    return {
+        items,
+        holidayItems,
+        refresh,
+        loading: eventLoading || holidayLoading
+    }
 }

@@ -1,6 +1,20 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
+export interface Api {
+    startGoogleOauth: () => void
+    onGoogleOauthSuccess: (callback: (tokens: any) => void) => void
+    onGoogleOauthError: (callback: (error: any) => void) => void
+    tryAutoLogin: () => Promise<any>
+    logoutGoogleOAuth: () => Promise<boolean>
+    safeReload: () => void
+    startDragging: () => void
+    stopDragging: () => void
+    quitApp: () => void
+    setOpacity: (opacity: number) => void
+    getInitialOpacity: () => Promise<number>
+    removeListeners: () => void
+}
 const api = {
     startGoogleOauth: () => ipcRenderer.send('start-google-oauth'),
 

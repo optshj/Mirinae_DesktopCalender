@@ -8,6 +8,7 @@ export default [
     js.configs.recommended,
     ...tseslint.configs.recommended,
     pluginReact.configs.flat.recommended,
+    'plugin:@tanstack/eslint-plugin-query/recommended',
     {
         languageOptions: {
             globals: {
