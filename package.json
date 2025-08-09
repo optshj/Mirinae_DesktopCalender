@@ -1,6 +1,6 @@
 {
     "name": "mirinae",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "미리내 | 당신의 하루를 별처럼 빛나게",
     "main": "./out/main/index.js",
     "author": "Mirinae",
@@ -25,6 +25,11 @@
     "build": {
         "appId": "com.mirinae",
         "productName": "미리내",
+        "publish": {
+            "provider": "github",
+            "owner": "optshj",
+            "repo": "https://github.com/optshj/Mirinae_DesktopCalender"
+        },
         "files": [
             "out/**/*",
             "package.json"
