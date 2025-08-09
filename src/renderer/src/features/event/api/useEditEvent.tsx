@@ -53,7 +53,13 @@ export function useEditEvent() {
             const previousData = queryClient.getQueryData<{
                 items: EventItemWithColor[]
             }>(['googleCalendarEvents'])
-
+            const [startHour, startMinute] = newEvent.startTime.split(':').map(Number)
+            const [endHour, endMinute] = newEvent.endTime.split(':').map(Number)
+            const startDateTime = new Date(newEvent.date)
+            const endDateTime = new Date(newEvent.date)
+            startDateTime.setHours(startHour, startMinute, 0, 0)
+            endDateTime.setHours(endHour, endMinute, 0, 0)
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
             const newEventItem = {
                 id: 'temp-id-' + Date.now(),
                 kind: 'calendar#event',
@@ -61,16 +67,18 @@ export function useEditEvent() {
                 status: 'confirmed',
                 summary: newEvent.summary,
                 start: {
-                    dateTime: new Date(newEvent.date).toISOString(),
-                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                    dateTime: startDateTime.toISOString(),
+                    timeZone: timeZone
                 },
                 end: {
-                    dateTime: new Date(newEvent.date).toISOString(),
-                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                    dateTime: endDateTime.toISOString(),
+                    timeZone: timeZone
                 },
                 colorId: newEvent.colorId || '1',
                 color: getColorById(newEvent.colorId || '1')
             }
+            console.log(newEvent)
+            console.log('Adding new event:', newEventItem)
 
             if (previousData) {
                 queryClient.setQueryData(['googleCalendarEvents'], {

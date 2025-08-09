@@ -12,7 +12,6 @@ const SERVICE_NAME = 'Mirinae'
 
 export let mainWindow: BrowserWindow
 
-// 자동실행 등록
 const myAppLauncher = new AutoLaunch({
     name: SERVICE_NAME,
     path: process.execPath
