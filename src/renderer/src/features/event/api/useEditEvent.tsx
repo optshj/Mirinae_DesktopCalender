@@ -9,19 +9,7 @@ export function useEditEvent() {
 
     const addEventMutation = useMutation({
         mutationKey: ['addEvent'],
-        mutationFn: async ({
-            date,
-            startTime,
-            endTime,
-            summary,
-            colorId
-        }: {
-            date: Date
-            startTime: string
-            endTime: string
-            summary: string
-            colorId: string
-        }) => {
+        mutationFn: async ({ date, startTime, endTime, summary, colorId }: { date: Date; startTime: string; endTime: string; summary: string; colorId: string }) => {
             const [startHour, startMinute] = startTime.split(':').map(Number)
             const [endHour, endMinute] = endTime.split(':').map(Number)
             const startDateTime = new Date(date)
@@ -77,8 +65,6 @@ export function useEditEvent() {
                 colorId: newEvent.colorId || '1',
                 color: getColorById(newEvent.colorId || '1')
             }
-            console.log(newEvent)
-            console.log('Adding new event:', newEventItem)
 
             if (previousData) {
                 queryClient.setQueryData(['googleCalendarEvents'], {

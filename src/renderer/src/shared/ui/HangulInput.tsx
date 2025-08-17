@@ -60,5 +60,5 @@ export default function HangulInput({ value, onChange, ...props }: HangulInputPr
         onChange(value + pastedText)
     }
 
-    return <input ref={inputRef} {...props} value={value} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={() => {}} autoComplete="off" />
+    return <input ref={inputRef} {...props} value={value} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={(e) => onChange(e.target.value)} autoComplete="off" />
 }

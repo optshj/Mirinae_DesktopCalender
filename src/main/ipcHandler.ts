@@ -13,13 +13,6 @@ export const registerIPCHandlers = () => {
         app.quit()
         reset()
     })
-    ipcMain.on('safe-reload', () => {
-        detach(mainWindow)
-        mainWindow.webContents.reload()
-        mainWindow.webContents.once('did-finish-load', () => {
-            attach(mainWindow, { forwardKeyboardInput: true, forwardMouseInput: true })
-        })
-    })
     ipcMain.on('start-dragging', () => detach(mainWindow))
     ipcMain.on('stop-dragging', () => {
         attach(mainWindow, { forwardKeyboardInput: true, forwardMouseInput: true })

@@ -22,7 +22,7 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
     return (
         <>
             <div className="bg-primary flex w-full flex-col overflow-hidden rounded-xl">
-                <div className="text-scondary grid grid-cols-7 bg-[#F9FAFB] text-center font-semibold dark:bg-zinc-800 dark:text-white">
+                <div className="grid grid-cols-7 bg-[#F9FAFB] text-center font-semibold dark:bg-zinc-800">
                     {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
                         <div className="py-2" key={day}>
                             {day}
@@ -35,15 +35,10 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                             const isCurrentMonth = date.getMonth() === month
                             const isToday = isSameDay(new Date(), date)
                             return (
-                                <DialogTrigger key={i}>
-                                    <div
-                                        className={`border-primary flex h-28 w-full flex-col overflow-hidden border py-1 ${isToday ? 'shadow-all' : ''}`}
-                                        onClick={() => handleDateDoubleClick(date)}
-                                    >
-                                        <div
-                                            className={`px-2 text-left font-semibold ${isCurrentMonth ? `${isToday ? 'text-main-color' : 'text-primary'}` : 'text-secondary'} `}
-                                        >
-                                            {date.getDate()}
+                                <DialogTrigger key={i} asChild>
+                                    <div className={`border-primary flex h-28 w-full flex-col overflow-hidden border py-1`} onClick={() => handleDateDoubleClick(date)}>
+                                        <div className={`px-1 font-semibold ${isCurrentMonth ? 'text-primary' : 'text-secondary'} `}>
+                                            <div className={`${isToday ? 'bg-main-color text-[#f3f4f6]' : ''} flex h-6 w-6 items-center justify-center rounded-full`}>{date.getDate()}</div>
                                         </div>
                                         <EventList items={items} date={date} />
                                     </div>

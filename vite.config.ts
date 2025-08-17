@@ -1,5 +1,7 @@
-import { resolve } from 'path'
+/// <reference types="vite/client" />
+
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
+import { resolve } from 'path'
 import csp from 'vite-plugin-csp-guard'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
