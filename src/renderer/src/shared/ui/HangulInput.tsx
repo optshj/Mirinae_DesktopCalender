@@ -43,8 +43,17 @@ export default function HangulInput({ value, onChange, ...props }: HangulInputPr
         if (e.key.length === 1) {
             e.preventDefault()
             let newValue = value
+
+            // 기본적으로 lower로 처리, shift키가 입력되었을때 대문자로 처리
             if (inputMode === 'ko' && e.key.match(/[a-zA-Z]/)) {
-                const korChar = convertEngToKor(e.key)
+                const isShift = e.shiftKey
+                const word = e.key.toLowerCase()
+                let korChar = convertEngToKor(word)
+                if (isShift) {
+                    const upperCase = e.key.toUpperCase()
+                    korChar = convertEngToKor(upperCase)
+                }
+
                 newValue = Hangul.assemble([...Hangul.disassemble(value), korChar])
             } else {
                 newValue = value + e.key

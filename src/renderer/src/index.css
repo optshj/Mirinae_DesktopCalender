@@ -97,7 +97,7 @@ div {
     -ms-user-select: none;
 }
 button {
-    user-select: none;
+    outline: none !important;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
