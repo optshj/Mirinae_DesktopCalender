@@ -40,10 +40,13 @@ function createWindow(): void {
     })
 
     mainWindow.on('ready-to-show', () => {
-        attach(mainWindow, {
-            forwardKeyboardInput: true,
-            forwardMouseInput: true
-        })
+        if (!(mainWindow as any)._isAttached) {
+            attach(mainWindow, {
+                forwardKeyboardInput: true,
+                forwardMouseInput: true
+            })
+            ;(mainWindow as any)._isAttached = true
+        }
 
         mainWindow.setOpacity(savedOpacity)
         mainWindow.setMenu(null)

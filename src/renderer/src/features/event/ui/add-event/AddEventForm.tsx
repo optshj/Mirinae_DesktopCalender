@@ -3,7 +3,7 @@ import { useEditEvent } from '../../api/useEditEvent'
 
 import HangulInput from '@/shared/ui/HangulInput'
 import { toast } from 'sonner'
-import { getColorById, getPalette } from '../../utils/getColor'
+import { getColorById, getPalette } from '../../lib/getColor'
 
 interface AddEventFormProps {
     date: Date

@@ -1,7 +1,7 @@
 import { useLogin } from '@/features/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { EventItemWithColor } from '../../../shared/types/EventTypes'
-import { getColorById } from '../utils/getColor'
+import { getColorById } from '../lib/getColor'
 
 export function useEditEvent() {
     const { tokens } = useLogin()

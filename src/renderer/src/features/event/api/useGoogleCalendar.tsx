@@ -1,5 +1,5 @@
 import { EventItem, EventItemWithColor } from '../../../shared/types/EventTypes'
-import { getColorById } from '../utils/getColor'
+import { getColorById } from '../lib/getColor'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useGoogleCalendar(access_token: string) {
@@ -19,10 +19,9 @@ export function useGoogleCalendar(access_token: string) {
     const { data: holidayData, isLoading: holidayLoading } = useQuery({
         queryKey: ['googleCalendarHolidays'],
         queryFn: async () => {
-            const res = await fetch(
-                'https://www.googleapis.com/calendar/v3/calendars/ko.south_korea%23holiday%40group.v.calendar.google.com/events?maxResults=2500',
-                { headers: { Authorization: `Bearer ${access_token}` } }
-            ).then((res) => res.json())
+            const res = await fetch('https://www.googleapis.com/calendar/v3/calendars/ko.south_korea%23holiday%40group.v.calendar.google.com/events?maxResults=2500', {
+                headers: { Authorization: `Bearer ${access_token}` }
+            }).then((res) => res.json())
             return res
         },
         enabled: !!access_token
