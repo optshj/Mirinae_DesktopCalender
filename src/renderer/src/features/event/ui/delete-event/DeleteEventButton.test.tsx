@@ -21,12 +21,6 @@ describe('DeleteEventButton', () => {
         mockDeleteEvent.mockClear()
     })
 
-    it('버튼을 렌더링한다.', () => {
-        renderWithProvider(<DeleteEventButton eventId="1" />)
-        const icon = screen.getByRole('button')
-        expect(icon).toBeInTheDocument()
-    })
-
     it('버튼을 누르면 이벤트 목록에서 이벤트를 삭제한다.', async () => {
         renderWithProvider(<DeleteEventButton eventId="123" />)
         const button = screen.getByRole('button')

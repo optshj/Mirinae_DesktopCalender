@@ -32,7 +32,6 @@ function createWindow(): void {
         frame: false,
         transparent: true,
         skipTaskbar: true,
-        type: 'toolbar',
         webPreferences: {
             preload: join(__dirname, '../preload/index.js'),
             sandbox: false,
@@ -45,6 +44,7 @@ function createWindow(): void {
             forwardKeyboardInput: true,
             forwardMouseInput: true
         })
+
         mainWindow.setOpacity(savedOpacity)
         mainWindow.setMenu(null)
         mainWindow.show()
@@ -58,7 +58,7 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
-    electronApp.setAppUserModelId('com.electron')
+    electronApp.setAppUserModelId('com.mirinae')
     app.on('browser-window-created', (_, window) => optimizer.watchWindowShortcuts(window))
 
     createWindow()

@@ -1,7 +1,7 @@
 # 📅 미리내 (Mirinae) - 데스크톱 캘린더 위젯
 
 데스크톱 캘린더 위젯, 미리내입니다.
-![2025-07-15105544-ezgif com-video-to-gif-converter (1)](https://github.com/user-attachments/assets/921c367a-1537-4040-a7b6-5a1ffd94a5b7)
+![alt text](2025-08-19143059-ezgif.com-video-to-gif-converter.gif)
 
 # ✨ 소개 (Introduction)
 
@@ -68,18 +68,19 @@ mirinae/
 ├── build/
 ├── resource/
 ├── src/
-│   ├── main/index.ts     # Electron 설정파일
+│   ├── main/index.ts        # Electron 설정파일
 │   ├── preload/index.ts
 │   └── renderer/
 |       ├── index.html
-│       └── src/          # FSD구조 프로젝트 폴더
+│       └── src/             # FSD구조 프로젝트 폴더
 │           ├── app/
 │           ├── entities/
 │           ├── pages/
 │           ├── shared/
 │           ├── widgets/
 │           ├── env.d.ts
-│           └── main.tsx    # 리액트 앱 진입점
+|           ├── setupTests.ts #  vitest 초기설정
+│           └── main.tsx      # 리액트 앱 진입점
 ├── prettierrc.yaml
 ├── electron-builder.yml
 ├── electron-vite-config.ts

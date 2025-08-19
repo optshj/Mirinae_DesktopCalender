@@ -56,7 +56,6 @@ describe('DarkModeButton', () => {
     })
 
     it('다크 모드 상태에서 클릭 시 라이트 모드로 전환되어야 함', () => {
-        // 다크 모드로 초기화
         localStorageMock.getItem.mockReturnValueOnce('dark')
         render(<DarkModeButton />)
         const toggle = screen.getByRole('button', { hidden: true })

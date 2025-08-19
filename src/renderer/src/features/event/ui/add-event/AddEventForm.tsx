@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useEditEvent } from '../../api/useEditEvent'
 
 import HangulInput from '@/shared/ui/HangulInput'
+import { toast } from 'sonner'
 import { getColorById, getPalette } from '../../utils/getColor'
 
 interface AddEventFormProps {
@@ -13,7 +14,6 @@ export function AddEventForm({ date }: AddEventFormProps) {
     const [showForm, setShowForm] = useState(false)
     const [startTime, setStartTime] = useState('09:00')
     const [endTime, setEndTime] = useState('09:00')
-    const [error, setError] = useState('')
 
     const selectedColor = getColorById(colorId).background
     const palette = getPalette()
@@ -26,18 +26,20 @@ export function AddEventForm({ date }: AddEventFormProps) {
         setShowForm(false)
         setSummary('')
         setColorId('1')
+        toast.success(`"${summary}" 일정이 추가되었습니다`, {
+            description: `${date.toLocaleDateString()} ${startTime} - ${endTime}에 일정이 추가되었습니다.`
+        })
     }
 
     const performSubmit = () => {
         if (!summary.trim()) {
-            setError('일정 제목을 입력해주세요')
+            toast.warning('일정 제목을 입력해주세요')
             return true
         }
         if (endTime < startTime) {
-            setError('종료시간은 시작시간 이후여야 합니다')
+            toast.warning('종료시간은 시작시간 이후여야 합니다')
             return true
         }
-        setError('')
         addEvent({ date, startTime, endTime, summary, colorId })
         return false
     }
@@ -54,7 +56,6 @@ export function AddEventForm({ date }: AddEventFormProps) {
             if (e.ctrlKey && e.key === 'Enter') {
                 if (showForm) {
                     e.preventDefault()
-                    performSubmit()
                 } else {
                     setShowForm(true)
                 }
@@ -127,20 +128,13 @@ export function AddEventForm({ date }: AddEventFormProps) {
                                 />
                             ))}
                     </div>
-                    <div className="mt-2 flex items-center justify-between gap-2">
-                        <div className="flex-shrink-0">{error && <div className="animate-shake text-xs text-red-500">{error}</div>}</div>
-                        <div className="flex items-center gap-2">
-                            <button
-                                type="button"
-                                className="rounded-lg border border-zinc-300 bg-zinc-100 px-6 py-1.5 font-semibold whitespace-nowrap text-zinc-500"
-                                onClick={() => setShowForm(false)}
-                            >
-                                취소
-                            </button>
-                            <button type="submit" className="rounded-lg px-6 py-1.5 font-semibold whitespace-nowrap text-white dark:saturate-70" style={{ backgroundColor: selectedColor }}>
-                                추가
-                            </button>
-                        </div>
+                    <div className="flex items-center justify-end gap-2">
+                        <button type="button" className="rounded-lg border border-zinc-300 bg-zinc-100 px-6 py-1.5 font-semibold whitespace-nowrap text-zinc-500" onClick={() => setShowForm(false)}>
+                            취소
+                        </button>
+                        <button type="submit" className="rounded-lg px-6 py-1.5 font-semibold whitespace-nowrap text-white dark:saturate-70" style={{ backgroundColor: selectedColor }}>
+                            추가
+                        </button>
                     </div>
                 </form>
             ) : (

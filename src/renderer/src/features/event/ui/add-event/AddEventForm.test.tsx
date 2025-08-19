@@ -1,9 +1,16 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { AddEventForm } from './AddEventForm'
+import { toast } from 'sonner'
 
 const mockAddEvent = vi.fn()
 
+vi.mock('sonner', () => ({
+    toast: Object.assign(vi.fn(), {
+        success: vi.fn(),
+        warning: vi.fn()
+    })
+}))
 vi.mock('../../api/useEditEvent', () => ({
     useEditEvent: () => ({
         addEvent: (event: any) => mockAddEvent(event)
@@ -31,10 +38,10 @@ describe('AddEventForm', () => {
         expect(await screen.findByLabelText(/일정 제목/i)).toBeInTheDocument()
     })
 
-    it('일정 제목 없이 제출하면 에러 메시지를 보여준다', async () => {
+    it('일정 제목 없이 제출하면 토스트로 에러 메시지를 보여준다', async () => {
         fireEvent.click(screen.getByText('+ 일정 추가'))
         fireEvent.click(screen.getByRole('button', { name: '추가' }))
-        expect(await screen.findByText('일정 제목을 입력해주세요')).toBeInTheDocument()
+        expect(toast.warning).toHaveBeenCalledWith('일정 제목을 입력해주세요')
     })
 
     it('일정 제목에 입력이 가능하다', async () => {
@@ -43,7 +50,7 @@ describe('AddEventForm', () => {
         expect(await screen.findByDisplayValue('테스트 일정')).toBeInTheDocument()
     })
 
-    it('종료 시간이 시작 시간보다 빠르면 에러 메시지를 보여준다', async () => {
+    it('종료 시간이 시작 시간보다 빠르면 토스트로 에러 메시지를 보여준다', async () => {
         fireEvent.click(screen.getByText('+ 일정 추가'))
 
         fireEvent.change(screen.getByPlaceholderText('일정을 입력해주세요'), { target: { value: '테스트 일정' } })
@@ -52,7 +59,7 @@ describe('AddEventForm', () => {
         fireEvent.change(screen.getByLabelText('종료 시간'), { target: { value: '09:00' } })
 
         fireEvent.click(screen.getByRole('button', { name: '추가' }))
-        expect(await screen.findByText('종료시간은 시작시간 이후여야 합니다')).toBeInTheDocument()
+        expect(toast.warning).toHaveBeenCalledWith('종료시간은 시작시간 이후여야 합니다')
     })
 
     it('정상 입력 시 일정이 추가된다', () => {

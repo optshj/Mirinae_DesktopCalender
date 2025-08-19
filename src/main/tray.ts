@@ -9,6 +9,8 @@ export function initTray() {
     const tray = new Tray(image)
     const autoLaunchStatus = app.getLoginItemSettings().openAtLogin
     const contextMenu = Menu.buildFromTemplate([
+        { label: `현재버전 : ${app.getVersion()}` },
+        { type: 'separator' },
         {
             label: '열기',
             click: (): void => {
