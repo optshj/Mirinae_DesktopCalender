@@ -11,7 +11,7 @@ export function DeleteEventButton({ eventId }: DeleteEventButtonProps) {
     return (
         <div
             role="button"
-            onClick={() => {
+            onDoubleClick={() => {
                 deleteEvent(eventId)
                 toast.success('일정이 삭제되었습니다.')
             }}

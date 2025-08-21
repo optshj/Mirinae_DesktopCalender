@@ -21,6 +21,7 @@ export function OpacityButton() {
                         setOpacity(value)
                         window.api.setOpacity(value)
                     }}
+                    min={0.4}
                     max={1.0}
                     step={0.05}
                 />

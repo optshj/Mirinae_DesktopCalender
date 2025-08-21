@@ -9,7 +9,7 @@ export function formatDate(date: string) {
 }
 
 // 예시 8:00 AM
-export function formatDateTIme(date: { date?: string; dateTime?: string; timeZone?: string }) {
+export function formatDateTime(date: { date?: string; dateTime?: string; timeZone?: string }) {
     if (!date.dateTime) return null
     const d = new Date(date.dateTime)
     const formatter = new Intl.DateTimeFormat('en-US', {

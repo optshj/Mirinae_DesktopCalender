@@ -1,24 +1,26 @@
-import { formatDateTIme, isSameDay } from '@/shared/lib/dateFunction'
+import { formatDateTime } from '@/shared/lib/dateFunction'
 import { EventItemWithColor } from '@/shared/types/EventTypes'
 
-export function EventList({ items, date }: { items: EventItemWithColor[] | null; date: Date }) {
-    const events =
-        items?.filter((item) => {
-            if (!item.start.dateTime && !item.start.date) return false
-            const eventDate = item.start.dateTime ? new Date(item.start.dateTime) : new Date(item.start.date)
-            return isSameDay(eventDate, date)
-        }) ?? []
+export function EventList({ items }: { items: EventItemWithColor[] }) {
     return (
         <>
-            {events.slice(0, 4).map((event, i) => (
+            {items.slice(0, 4).map((event, i) => (
                 <div
                     key={i}
                     style={{
-                        background: event.color.background
+                        background: `${event.color.background}30`
                     }}
-                    className="text-depend mx-1 mt-1 line-clamp-1 flex items-center truncate overflow-hidden rounded-lg px-2 py-1 text-sm dark:saturate-70"
+                    className="mx-1 mt-1 line-clamp-1 flex items-center truncate overflow-hidden rounded-sm pr-1 text-sm dark:saturate-70"
                 >
-                    {formatDateTIme(event.start)} {event.summary}
+                    <div
+                        className="mr-1 w-2 flex-shrink-0 self-stretch rounded-l-sm"
+                        style={{
+                            backgroundColor: event.color.background
+                        }}
+                    />
+                    <span className="text-primary truncate py-0.5">
+                        {formatDateTime(event.start)} {event.summary}
+                    </span>
                 </div>
             ))}
         </>

@@ -1,11 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react'
 
-interface FlipCalendarContextType {
-    isFlipCalendar: boolean
-    flipCalendar: () => void
-}
-
-export const FlipCalendarContext = createContext<FlipCalendarContextType | undefined>(undefined)
+export const FlipCalendarContext = createContext<{ isFlipCalendar: boolean; flipCalendar: () => void }>({ isFlipCalendar: false, flipCalendar: () => {} })
 
 export function FlipCalendarProvider({ children }: { children: ReactNode }) {
     const [isFlipCalendar, setIsFlipCalendar] = useState(false)

@@ -35,6 +35,10 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                     {days.map((date, i) => {
                         const isCurrentMonth = date.getMonth() === month
                         const isToday = isSameDay(new Date(), date)
+                        const events = items?.filter((item) => {
+                            const eventDate = item.start.dateTime ? new Date(item.start.dateTime) : new Date(item.start.date)
+                            return isSameDay(eventDate, date)
+                        })
                         return (
                             <DialogTrigger key={i} asChild>
                                 <div
@@ -45,7 +49,7 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                                     <div className={`px-1 font-semibold ${isCurrentMonth ? 'text-primary' : 'text-secondary'} `}>
                                         <div className={`${isToday ? 'bg-main-color text-[#f3f4f6]' : ''} flex h-6 w-6 items-center justify-center rounded-full`}>{date.getDate()}</div>
                                     </div>
-                                    <EventList items={items} date={date} />
+                                    <EventList items={events} />
                                 </div>
                             </DialogTrigger>
                         )

@@ -1,34 +1,29 @@
+import { useMemo } from 'react'
 import { FooterEvent } from '@/entities/event'
 import { useCalendarItems } from '@/features/event'
 import { isSameDay } from '@/shared/lib/dateFunction'
-import { useMemo } from 'react'
 
 export function Footer() {
     const { items } = useCalendarItems()
+    const tomorrow = new Date()
+    tomorrow.setHours(0, 0, 0, 0)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
     const upcomingEvent = useMemo(() => {
-        const tomorrow = new Date()
-        tomorrow.setHours(0, 0, 0, 0)
-        tomorrow.setDate(tomorrow.getDate() + 1)
-        return (items || [])
-            .filter((event) => new Date(event.start.dateTime) >= tomorrow)
-            .sort((a, b) => new Date(a.start.dateTime).getTime() - new Date(b.start.dateTime).getTime())
+        return items.filter((event) => new Date(event.start.dateTime) >= tomorrow).sort((a, b) => new Date(a.start.dateTime).getTime() - new Date(b.start.dateTime).getTime())
     }, [items])
 
     const todayEvent = useMemo(
         () =>
-            items?.filter((item) => {
+            items.filter((item) => {
                 if (!item.start.dateTime) return false
                 return isSameDay(new Date(item.start.dateTime), new Date())
-            }) ?? [],
+            }),
         [items]
     )
 
     const importantEvent = useMemo(() => {
-        const tomorrow = new Date()
-        tomorrow.setHours(0, 0, 0, 0)
-        tomorrow.setDate(tomorrow.getDate() + 1)
-
-        return (items || [])
+        return items
             .filter((event) => new Date(event.start.dateTime) >= tomorrow)
             .filter((event) => event.colorId === '11') // 빨간색 일정만 중요한 일정으로 표시
             .sort((a, b) => new Date(a.start.dateTime).getTime() - new Date(b.start.dateTime).getTime())

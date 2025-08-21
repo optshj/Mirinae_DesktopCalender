@@ -8,12 +8,10 @@ import { DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
 
 export function ScheduleModal({ date }: { date: Date }) {
     const { items } = useCalendarItems()
-    const events =
-        items?.filter((item) => {
-            if (!item.start.dateTime && !item.start.date) return false
-            const eventDate = item.start.dateTime ? new Date(item.start.dateTime) : new Date(item.start.date)
-            return isSameDay(eventDate, date)
-        }) ?? []
+    const events = items.filter((item) => {
+        const eventDate = item.start.dateTime ? new Date(item.start.dateTime) : new Date(item.start.date)
+        return isSameDay(eventDate, date)
+    })
     return (
         <DialogContent>
             <DialogHeader>
