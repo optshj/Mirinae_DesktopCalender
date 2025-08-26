@@ -42,7 +42,6 @@ export function useGoogleCalendar() {
     })
     const mergedItems = isShow ? [...(holidayItems ?? []), ...(items ?? [])] : (items ?? []) // event와 holiday를 합침 (공휴일표시 여부에 따라 필터링)
 
-    console.log(mergedItems)
     return {
         items: mergedItems
     }

@@ -1,5 +1,6 @@
-import { Slider } from '@/shared/ui/slider'
+import { Button } from '@/shared/ui/button'
 import { useEffect, useState } from 'react'
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 
 export function OpacityButton() {
     const [opacity, setOpacity] = useState(1.0)
@@ -12,20 +13,38 @@ export function OpacityButton() {
     }, [])
 
     return (
-        <div className="rounded px-2 py-1">
-            <label htmlFor="opacity-slider">투명도 조절</label>
-            <div className="flex items-center gap-2">
-                <Slider
-                    defaultValue={[opacity]}
-                    onValueChange={([value]) => {
-                        setOpacity(value)
-                        window.api.setOpacity(value)
+        <div className="flex flex-row justify-between rounded px-2 py-1">
+            <label htmlFor="opacity-slider">투명도</label>
+            <div className="flex items-center gap-0.5">
+                <Button
+                    variant="outline"
+                    size="icon"
+                    className="size-5"
+                    onClick={() => {
+                        setOpacity((prev) => {
+                            const newOpacity = Math.min(prev + 0.05, 1.0)
+                            window.api.setOpacity(newOpacity)
+                            return newOpacity
+                        })
                     }}
-                    min={0.4}
-                    max={1.0}
-                    step={0.05}
-                />
-                <span className="text-xs font-semibold">{Math.round(opacity * 100)}%</span>
+                >
+                    <IoIosArrowUp />
+                </Button>
+                <span className="flex w-9 justify-center text-xs font-semibold">{Math.round(opacity * 100)}%</span>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    className="size-5"
+                    onClick={() => {
+                        setOpacity((prev) => {
+                            const newOpacity = Math.max(prev - 0.05, 0.2)
+                            window.api.setOpacity(newOpacity)
+                            return newOpacity
+                        })
+                    }}
+                >
+                    <IoIosArrowDown />
+                </Button>
             </div>
         </div>
     )

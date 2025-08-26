@@ -51,7 +51,7 @@ export function useEditEvent() {
             const newEventItem = {
                 id: 'temp-id-' + Date.now(),
                 kind: 'calendar#event',
-                etag: '',
+                etag: 'temp-etag-' + Date.now(),
                 status: 'confirmed',
                 summary: newEvent.summary,
                 start: {
@@ -68,7 +68,7 @@ export function useEditEvent() {
 
             if (previousData) {
                 queryClient.setQueryData(['googleCalendarEvents'], {
-                    items: [newEventItem, ...previousData.items]
+                    items: [...previousData.items, newEventItem]
                 })
             }
 
