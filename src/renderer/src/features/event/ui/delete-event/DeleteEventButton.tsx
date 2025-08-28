@@ -1,4 +1,4 @@
-import { AiFillDelete } from 'react-icons/ai'
+import { IoCloseOutline } from 'react-icons/io5'
 import { useEditEvent } from '../../api/useEditEvent'
 import { toast } from 'sonner'
 
@@ -9,15 +9,13 @@ export function DeleteEventButton({ eventId }: DeleteEventButtonProps) {
     const { deleteEvent } = useEditEvent()
 
     return (
-        <div
-            role="button"
+        <button
             onDoubleClick={() => {
                 deleteEvent(eventId)
                 toast.success('일정이 삭제되었습니다.')
             }}
-            className="text-base"
         >
-            <AiFillDelete className="text-lg" />
-        </div>
+            <IoCloseOutline />
+        </button>
     )
 }

@@ -1,7 +1,7 @@
-import { LuFoldVertical } from 'react-icons/lu'
+import { FoldVertical } from 'lucide-react'
 import { useFlipCalendar } from '../../model/FlipCalendarContext'
 
 export function FlipButton() {
     const { flipCalendar } = useFlipCalendar()
-    return <LuFoldVertical role="button" size={24} onClick={() => flipCalendar()} />
+    return <FoldVertical strokeWidth={1.25} role="button" size={24} onClick={() => flipCalendar()} />
 }

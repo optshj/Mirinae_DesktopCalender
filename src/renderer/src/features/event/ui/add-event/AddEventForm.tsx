@@ -1,61 +1,63 @@
 import { useEffect, useState } from 'react'
+
 import { useEditEvent } from '../../api/useEditEvent'
+import { getColorById, getPalette } from '../../lib/getColor'
 
 import HangulInput from '@/shared/ui/HangulInput'
 import { toast } from 'sonner'
-import { getColorById, getPalette } from '../../lib/getColor'
 
-interface AddEventFormProps {
-    date: Date
+interface FormState {
+    summary: string
+    colorId: string
+    startTime: string
+    endTime: string
 }
-export function AddEventForm({ date }: AddEventFormProps) {
-    const [summary, setSummary] = useState('')
-    const [colorId, setColorId] = useState('1')
+export function AddEventForm({ date }: { date: Date }) {
     const [showForm, setShowForm] = useState(false)
-    const [startTime, setStartTime] = useState('09:00')
-    const [endTime, setEndTime] = useState('09:00')
+    const [form, setForm] = useState<FormState>({
+        summary: '',
+        colorId: '1',
+        startTime: '09:00',
+        endTime: '09:00'
+    })
+    const updateForm = (key: keyof FormState, value: string) => setForm((prev) => ({ ...prev, [key]: value }))
+    const resetForm = () => setForm({ summary: '', colorId: '1', startTime: '09:00', endTime: '09:00' })
 
-    const selectedColor = getColorById(colorId).background
+    const selectedColor = getColorById(form.colorId).background
     const palette = getPalette()
 
     const { addEvent } = useEditEvent()
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleSubmit = () => {
         if (performSubmit()) return
         setShowForm(false)
-        setSummary('')
-        setColorId('1')
-        toast.success(`"${summary}" 일정이 추가되었습니다`, {
-            description: `${date.toLocaleDateString()} ${startTime} - ${endTime}에 일정이 추가되었습니다.`
+        resetForm()
+        toast.success(`"${form.summary}" 일정이 추가되었습니다`, {
+            description: `${date.toLocaleDateString()} ${form.startTime} - ${form.endTime}에 일정이 추가되었습니다.`
         })
     }
 
     const performSubmit = () => {
-        if (!summary.trim()) {
+        if (!form.summary.trim()) {
             toast.warning('일정 제목을 입력해주세요')
             return true
         }
-        if (endTime < startTime) {
+        if (form.endTime < form.startTime) {
             toast.warning('종료시간은 시작시간 이후여야 합니다')
             return true
         }
-        addEvent({ date, startTime, endTime, summary, colorId })
+        addEvent({ date, ...form })
         return false
     }
 
-    const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-        if (e.ctrlKey && e.key === 'Enter') {
-            e.preventDefault()
-            handleSubmit(e)
-        }
-    }
-
+    // crtl + enter키로 제출
+    // ctrl + enter 키로 폼을 여는 리스너
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault()
                 if (showForm) {
-                    e.preventDefault()
+                    handleSubmit() // 이제 그냥 호출하면 됨 ✅
                 } else {
                     setShowForm(true)
                 }
@@ -63,12 +65,12 @@ export function AddEventForm({ date }: AddEventFormProps) {
         }
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [showForm, performSubmit])
+    }, [showForm, form])
 
     return (
         <>
             {showForm ? (
-                <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown} className="flex flex-col gap-4 rounded-xl border p-4 dark:saturate-70" style={{ borderColor: selectedColor }}>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-xl border p-4 dark:saturate-70" style={{ borderColor: selectedColor }}>
                     <div className="flex flex-col gap-1">
                         <label htmlFor="summary" style={{ color: selectedColor }}>
                             일정 제목
@@ -78,8 +80,8 @@ export function AddEventForm({ date }: AddEventFormProps) {
                             placeholder="일정을 입력해주세요"
                             className="text-primary rounded-lg border border-zinc-300 py-2 pr-20 pl-3 focus:ring-0 focus:outline-none dark:saturate-70"
                             type="text"
-                            value={summary}
-                            onChange={(newSummary) => setSummary(newSummary)}
+                            value={form.summary}
+                            onChange={(newSummary) => updateForm('summary', newSummary)}
                             autoFocus
                             style={{ borderColor: selectedColor }}
                         />
@@ -93,10 +95,10 @@ export function AddEventForm({ date }: AddEventFormProps) {
                             <input
                                 id="start-time"
                                 type="time"
-                                value={startTime}
+                                value={form.startTime}
                                 onChange={(e) => {
-                                    setStartTime(e.target.value)
-                                    setEndTime(e.target.value)
+                                    updateForm('startTime', e.target.value)
+                                    updateForm('endTime', e.target.value)
                                 }}
                                 className="text-primary mt-1 block w-full rounded-lg border border-zinc-300 p-2 focus:ring-0 focus:outline-none dark:saturate-70"
                                 style={{ borderColor: selectedColor }}
@@ -109,8 +111,8 @@ export function AddEventForm({ date }: AddEventFormProps) {
                             <input
                                 id="end-time"
                                 type="time"
-                                value={endTime}
-                                onChange={(e) => setEndTime(e.target.value)}
+                                value={form.endTime}
+                                onChange={(e) => updateForm('endTime', e.target.value)}
                                 className="text-primary mt-1 block w-full rounded-lg border border-zinc-300 p-2 focus:ring-0 focus:outline-none dark:saturate-70"
                                 style={{ borderColor: selectedColor }}
                             />
@@ -118,15 +120,14 @@ export function AddEventForm({ date }: AddEventFormProps) {
                     </div>
 
                     <div className="grid grid-cols-6 gap-2 px-2">
-                        {palette &&
-                            Object.entries(palette).map(([key, color]) => (
-                                <div
-                                    key={key}
-                                    className="inline-block h-6 w-6 cursor-pointer rounded-full dark:saturate-70"
-                                    style={{ backgroundColor: color.background }}
-                                    onClick={() => setColorId(key)}
-                                />
-                            ))}
+                        {Object.entries(palette).map(([key, color]) => (
+                            <div
+                                key={key}
+                                className="inline-block h-6 w-6 cursor-pointer rounded-full dark:saturate-70"
+                                style={{ backgroundColor: color.background }}
+                                onClick={() => updateForm('colorId', key)}
+                            />
+                        ))}
                     </div>
                     <div className="flex items-center justify-end gap-2">
                         <button type="button" className="rounded-lg border border-zinc-300 bg-zinc-100 px-6 py-1.5 font-semibold whitespace-nowrap text-zinc-500" onClick={() => setShowForm(false)}>
@@ -138,9 +139,9 @@ export function AddEventForm({ date }: AddEventFormProps) {
                     </div>
                 </form>
             ) : (
-                <div role="button" className="text-secondary mt-2 w-full rounded-xl border-2 border-dashed border-zinc-300 py-3 text-center font-semibold" onClick={() => setShowForm(true)}>
+                <button className="text-secondary mt-2 w-full rounded-xl border-2 border-dashed border-zinc-300 py-3 text-center font-semibold" onClick={() => setShowForm(true)}>
                     + 일정 추가
-                </div>
+                </button>
             )}
         </>
     )

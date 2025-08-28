@@ -10,7 +10,6 @@ export function MoveActiveButton() {
                         setIsDrag(false)
                         window.api.stopDragging()
                     }}
-                    className="rounded px-2 py-1"
                 >
                     위치수정 종료
                 </div>
@@ -20,7 +19,6 @@ export function MoveActiveButton() {
                         setIsDrag(true)
                         window.api.startDragging()
                     }}
-                    className="rounded px-2 py-1"
                 >
                     위치수정 시작
                 </div>

@@ -31,7 +31,7 @@ export function DarkModeButton() {
     }
 
     return (
-        <div className="flex flex-row justify-between rounded px-2 py-1 select-none">
+        <div className="flex flex-row justify-between select-none">
             <label>다크모드</label>
             <button onClick={toggleDarkMode} className="relative flex h-6 w-12 cursor-pointer items-center justify-center rounded-full bg-yellow-400 transition-colors duration-300 dark:bg-gray-500">
                 <div className={`absolute h-5 w-5 rounded-full bg-white p-1 transition-all duration-300 ${darkMode ? 'left-[5%]' : 'left-[55%]'}`}>

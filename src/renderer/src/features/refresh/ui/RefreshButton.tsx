@@ -1,5 +1,5 @@
-import { MdOutlineRefresh } from 'react-icons/md'
+import { RotateCw } from 'lucide-react'
 
 export function RefreshButton() {
-    return <MdOutlineRefresh size={24} onClick={() => window.location.reload()} />
+    return <RotateCw size={24} onClick={() => window.location.reload()} />
 }
