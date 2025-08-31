@@ -4,7 +4,7 @@ import { LoginButton } from '@/features/user'
 import { OpacityButton } from '@/features/opacity'
 import { QuitAppButton } from '@/features/quit'
 import { DarkModeButton } from '@/features/darkmode'
-import { ColorFilterButton, HolidayButton } from '@/features/event'
+import { HolidayButton } from '@/features/event'
 import { MoveActiveButton } from '@/features/move'
 import { EllipsisVertical } from 'lucide-react'
 

@@ -1,6 +1,6 @@
 {
     "name": "mirinae",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "미리내 | 당신의 하루를 별처럼 빛나게",
     "main": "./out/main/index.js",
     "author": "Mirinae",
