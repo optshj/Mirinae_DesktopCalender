@@ -110,7 +110,11 @@ body {
     height: 100%;
     background: transparent;
 }
-
+html.resizable {
+    border-radius: 12px;
+    border: 2px dotted #f3f4f6;
+    box-sizing: border-box;
+}
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);

@@ -13,8 +13,12 @@ export const registerIPCHandlers = () => {
         app.quit()
         reset()
     })
-    ipcMain.on('start-dragging', () => detach(mainWindow))
+    ipcMain.on('start-dragging', () => {
+        detach(mainWindow)
+        mainWindow.setResizable(true)
+    })
     ipcMain.on('stop-dragging', () => {
+        mainWindow.setResizable(false)
         attach(mainWindow, { forwardKeyboardInput: true, forwardMouseInput: true })
         const { width, height, x, y } = mainWindow.getBounds()
         store.set('window-bounds', { width, height, x, y })

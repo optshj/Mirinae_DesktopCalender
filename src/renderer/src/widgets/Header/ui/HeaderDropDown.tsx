@@ -10,13 +10,12 @@ import { EllipsisVertical } from 'lucide-react'
 
 export function HeaderDropDown() {
     return (
-        <DropDown trigger={<EllipsisVertical strokeWidth={1.5} size={32} />} align="right">
+        <DropDown trigger={<EllipsisVertical strokeWidth={1.5} size={24} />} align="right">
             <LoginButton />
             <MoveActiveButton />
             <OpacityButton />
             <DarkModeButton />
             <HolidayButton />
-            {/* <ColorFilterButton /> */}
             <QuitAppButton />
         </DropDown>
     )

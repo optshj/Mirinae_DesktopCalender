@@ -27,7 +27,7 @@ function createWindow(): void {
         x: savedBounds.x,
         y: savedBounds.y,
         width: savedBounds.width,
-        height: screenHeight,
+        height: savedBounds.height ? savedBounds.height : screenHeight,
         show: false,
         frame: false,
         transparent: true,

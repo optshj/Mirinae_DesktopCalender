@@ -12,12 +12,10 @@ export function Calendar() {
 
     return (
         <div className="flex flex-col items-center">
-            <div className="w-full max-w-7xl">
-                <Header displayMonth={displayMonth} year={year} handleNextMonth={handleNextMonth} handlePrevMonth={handlePrevMonth} />
-                <div className={`transition-all duration-300 ease-in-out ${isFlipCalendar ? 'pointer-events-none mt-[-16px] scale-95 opacity-0' : 'pointer-events-auto mt-0 scale-100 opacity-100'} `}>
-                    <CalendarGrid days={days} month={month} />
-                    <Footer />
-                </div>
+            <Header displayMonth={displayMonth} year={year} handleNextMonth={handleNextMonth} handlePrevMonth={handlePrevMonth} />
+            <div className={`w-full transition-all duration-300 ease-in-out ${isFlipCalendar ? 'pointer-events-none mt-[-16px] scale-95 opacity-0' : 'mt-0 scale-100 opacity-100'} `}>
+                <CalendarGrid days={days} month={month} />
+                <Footer />
             </div>
         </div>
     )

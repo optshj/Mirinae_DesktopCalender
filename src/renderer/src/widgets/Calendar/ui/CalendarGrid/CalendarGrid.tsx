@@ -30,7 +30,10 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                     </div>
                 ))}
             </div>
-            <div className="grid grid-cols-7">
+            <div
+                className="grid grid-cols-7"
+                style={{ gridTemplateRows: 'repeat(6, 1fr)', height: 'calc(100vh - 20rem)' }} // 6rem 헤더 등 제외 높이
+            >
                 <Dialog open={open} onOpenChange={setOpen}>
                     {days.map((date, i) => {
                         const isCurrentMonth = date.getMonth() === month
@@ -42,7 +45,7 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                         return (
                             <DialogTrigger key={i} asChild>
                                 <div
-                                    className={`border-primary flex h-28 w-full flex-col overflow-hidden border py-1`}
+                                    className={`border-primary flex h-full w-full flex-1 flex-col overflow-hidden border py-1`}
                                     onClick={(e) => e.preventDefault()}
                                     onDoubleClick={() => handleDateDoubleClick(date)}
                                 >

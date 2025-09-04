@@ -1,6 +1,5 @@
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl'
 
-import { MoveButton } from '@/features/move'
 import { FlipButton } from '@/features/flip'
 import { RefreshButton } from '@/features/refresh'
 import { HeaderDropDown } from './HeaderDropDown'
@@ -28,7 +27,6 @@ export function Header({ displayMonth, year, handlePrevMonth, handleNextMonth }:
 
             <div className="text-primary flex items-center gap-4">
                 <FlipButton />
-                <MoveButton />
                 <RefreshButton />
                 <HeaderDropDown />
             </div>

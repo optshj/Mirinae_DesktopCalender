@@ -1,7 +1,15 @@
-import { FoldVertical } from 'lucide-react'
+import { FoldVertical, UnfoldVertical } from 'lucide-react'
 import { useFlipCalendar } from '../../model/FlipCalendarContext'
 
 export function FlipButton() {
-    const { flipCalendar } = useFlipCalendar()
-    return <FoldVertical strokeWidth={1.25} role="button" size={24} onClick={() => flipCalendar()} />
+    const { flipCalendar, isFlipCalendar } = useFlipCalendar()
+    return (
+        <>
+            {isFlipCalendar ? (
+                <UnfoldVertical strokeWidth={1.5} role="button" size={24} onClick={() => flipCalendar()} />
+            ) : (
+                <FoldVertical strokeWidth={1.5} role="button" size={24} onClick={() => flipCalendar()} />
+            )}
+        </>
+    )
 }

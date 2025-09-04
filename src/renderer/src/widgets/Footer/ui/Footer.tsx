@@ -30,7 +30,7 @@ export function Footer() {
     }, [items])
 
     return (
-        <aside className="mt-2 flex h-48 flex-row gap-2">
+        <aside className="mt-2 grid h-48 grid-cols-3 gap-2">
             <FooterEvent items={todayEvent} title="오늘의 일정" description="오늘의 일정이 없습니다" />
             <FooterEvent items={upcomingEvent} title="다가오는 일정" description="다가오는 일정이 없습니다" />
             <FooterEvent items={importantEvent} title="중요한 일정" description="빨간색 일정이 표시됩니다" />

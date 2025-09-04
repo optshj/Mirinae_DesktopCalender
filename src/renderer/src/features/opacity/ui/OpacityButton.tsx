@@ -20,6 +20,7 @@ export function OpacityButton() {
                     variant="outline"
                     size="icon"
                     className="size-5"
+                    tabIndex={-1}
                     onClick={() => {
                         setOpacity((prev) => {
                             const newOpacity = Math.max(prev - 0.05, 0.2)
@@ -35,6 +36,7 @@ export function OpacityButton() {
                     variant="outline"
                     size="icon"
                     className="size-5"
+                    tabIndex={-1}
                     onClick={() => {
                         setOpacity((prev) => {
                             const newOpacity = Math.min(prev + 0.05, 1.0)

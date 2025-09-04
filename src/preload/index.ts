@@ -33,7 +33,7 @@ const api = {
     startDragging: () => ipcRenderer.send('start-dragging'),
     stopDragging: () => ipcRenderer.send('stop-dragging'),
     quitApp: () => ipcRenderer.send('quit-app'),
-    setOpacity: (opacity) => ipcRenderer.send('set-opacity', opacity),
+    setOpacity: (opacity: number) => ipcRenderer.send('set-opacity', opacity),
     getInitialOpacity: () => ipcRenderer.invoke('get-initial-opacity'),
 
     removeListeners: () => {
