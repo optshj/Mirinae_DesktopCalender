@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 
+import { Check } from 'lucide-react'
 import { useEditEvent } from '../../api/useEditEvent'
 import { getColorById, getPalette } from '../../lib/getColor'
 
 import HangulInput from '@/shared/ui/HangulInput'
 import { toast } from 'sonner'
+import { Dial } from './Dial'
 
 interface FormState {
     summary: string
@@ -17,11 +19,11 @@ export function AddEventForm({ date }: { date: Date }) {
     const [form, setForm] = useState<FormState>({
         summary: '',
         colorId: '1',
-        startTime: '09:00',
-        endTime: '09:00'
+        startTime: '8:00',
+        endTime: '10:00'
     })
     const updateForm = (key: keyof FormState, value: string) => setForm((prev) => ({ ...prev, [key]: value }))
-    const resetForm = () => setForm({ summary: '', colorId: '1', startTime: '09:00', endTime: '09:00' })
+    const resetForm = () => setForm({ summary: '', colorId: '1', startTime: '8:00', endTime: '10:00' })
 
     const selectedColor = getColorById(form.colorId).background
     const palette = getPalette()
@@ -50,14 +52,13 @@ export function AddEventForm({ date }: { date: Date }) {
         return false
     }
 
-    // crtl + enter키로 제출
-    // ctrl + enter 키로 폼을 여는 리스너
+    // crtl + enter키로 제출 또는 폼을 여는 리스너
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.key === 'Enter') {
                 e.preventDefault()
                 if (showForm) {
-                    handleSubmit() // 이제 그냥 호출하면 됨 ✅
+                    handleSubmit()
                 } else {
                     setShowForm(true)
                 }
@@ -86,47 +87,32 @@ export function AddEventForm({ date }: { date: Date }) {
                             style={{ borderColor: selectedColor }}
                         />
                     </div>
-
-                    <div className="flex items-center gap-4">
-                        <div className="flex-1">
-                            <label htmlFor="start-time" className="block text-sm font-medium" style={{ color: selectedColor }}>
-                                시작 시간
-                            </label>
-                            <input
-                                id="start-time"
-                                type="time"
-                                value={form.startTime}
-                                onChange={(e) => {
-                                    updateForm('startTime', e.target.value)
-                                    updateForm('endTime', e.target.value)
-                                }}
-                                className="text-primary mt-1 block w-full rounded-lg border border-zinc-300 p-2 focus:ring-0 focus:outline-none dark:saturate-70"
-                                style={{ borderColor: selectedColor }}
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <label htmlFor="end-time" className="block text-sm font-medium" style={{ color: selectedColor }}>
-                                종료 시간
-                            </label>
-                            <input
-                                id="end-time"
-                                type="time"
-                                value={form.endTime}
-                                onChange={(e) => updateForm('endTime', e.target.value)}
-                                className="text-primary mt-1 block w-full rounded-lg border border-zinc-300 p-2 focus:ring-0 focus:outline-none dark:saturate-70"
-                                style={{ borderColor: selectedColor }}
-                            />
+                    <div>
+                        <label style={{ color: selectedColor }}>시간 선택</label>
+                        <div className="relative -my-5 flex flex-col items-center justify-center">
+                            <div className="text-primary absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col">
+                                <div>
+                                    <span style={{ color: selectedColor }}>{`시작 : `}</span>
+                                    <span>{`${form.startTime}`}</span>
+                                </div>
+                                <div>
+                                    <span style={{ color: selectedColor }}>{`종료 : `}</span>
+                                    <span>{`${form.endTime}`}</span>
+                                </div>
+                            </div>
+                            <Dial updateForm={updateForm} color={selectedColor} />
                         </div>
                     </div>
-
                     <div className="grid grid-cols-6 gap-2 px-2">
                         {Object.entries(palette).map(([key, color]) => (
                             <div
                                 key={key}
-                                className="inline-block h-6 w-6 cursor-pointer rounded-full dark:saturate-70"
+                                className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full dark:saturate-70"
                                 style={{ backgroundColor: color.background }}
                                 onClick={() => updateForm('colorId', key)}
-                            />
+                            >
+                                {form.colorId === key && <Check className="text-white" size={16} />}
+                            </div>
                         ))}
                     </div>
                     <div className="flex items-center justify-end gap-2">
@@ -139,7 +125,13 @@ export function AddEventForm({ date }: { date: Date }) {
                     </div>
                 </form>
             ) : (
-                <button className="text-secondary mt-2 w-full rounded-xl border-2 border-dashed border-zinc-300 py-3 text-center font-semibold" onClick={() => setShowForm(true)}>
+                <button
+                    className="text-secondary mt-2 w-full rounded-xl border-2 border-dashed border-zinc-300 py-3 text-center font-semibold"
+                    onClick={() => {
+                        setShowForm(true)
+                        resetForm()
+                    }}
+                >
                     + 일정 추가
                 </button>
             )}

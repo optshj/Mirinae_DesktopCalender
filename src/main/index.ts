@@ -30,6 +30,7 @@ function createWindow(): void {
         height: savedBounds.height ? savedBounds.height : screenHeight,
         show: false,
         frame: false,
+        focusable: true,
         transparent: true,
         skipTaskbar: true,
         webPreferences: {
@@ -42,8 +43,8 @@ function createWindow(): void {
     mainWindow.on('ready-to-show', () => {
         if (!(mainWindow as any)._isAttached) {
             attach(mainWindow, {
-                forwardKeyboardInput: true,
-                forwardMouseInput: true
+                forwardMouseInput: true,
+                forwardKeyboardInput: true
             })
             ;(mainWindow as any)._isAttached = true
         }
