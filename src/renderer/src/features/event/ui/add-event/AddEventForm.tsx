@@ -7,6 +7,7 @@ import { getColorById, getPalette } from '../../lib/getColor'
 import HangulInput from '@/shared/ui/HangulInput'
 import { toast } from 'sonner'
 import { Dial } from './Dial'
+import { DialLinear } from './DialLinear'
 
 interface FormState {
     summary: string
@@ -19,15 +20,14 @@ export function AddEventForm({ date }: { date: Date }) {
     const [form, setForm] = useState<FormState>({
         summary: '',
         colorId: '1',
-        startTime: '8:00',
+        startTime: '08:00',
         endTime: '10:00'
     })
     const updateForm = (key: keyof FormState, value: string) => setForm((prev) => ({ ...prev, [key]: value }))
-    const resetForm = () => setForm({ summary: '', colorId: '1', startTime: '8:00', endTime: '10:00' })
+    const resetForm = () => setForm({ summary: '', colorId: '1', startTime: '08:00', endTime: '10:00' })
 
     const selectedColor = getColorById(form.colorId).background
     const palette = getPalette()
-
     const { addEvent } = useEditEvent()
 
     const handleSubmit = () => {
@@ -37,6 +37,10 @@ export function AddEventForm({ date }: { date: Date }) {
         toast.success(`"${form.summary}" 일정이 추가되었습니다`, {
             description: `${date.toLocaleDateString()} ${form.startTime} - ${form.endTime}에 일정이 추가되었습니다.`
         })
+    }
+    const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        handleSubmit()
     }
 
     const performSubmit = () => {
@@ -71,7 +75,7 @@ export function AddEventForm({ date }: { date: Date }) {
     return (
         <>
             {showForm ? (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-xl border p-4 dark:saturate-70" style={{ borderColor: selectedColor }}>
+                <form onSubmit={onFormSubmit} className="flex flex-col gap-4 rounded-xl border p-4 dark:saturate-70" style={{ borderColor: selectedColor }}>
                     <div className="flex flex-col gap-1">
                         <label htmlFor="summary" style={{ color: selectedColor }}>
                             일정 제목
@@ -102,12 +106,21 @@ export function AddEventForm({ date }: { date: Date }) {
                             </div>
                             <Dial updateForm={updateForm} color={selectedColor} />
                         </div>
+                        {/* <div className="relative flex flex-col items-center justify-center">
+                            <div className="flex flex-row gap-2">
+                                <span style={{ color: selectedColor }}>{`시작 : `}</span>
+                                <span>{`${form.startTime}`}</span>
+                                <span style={{ color: selectedColor }}>{`종료 : `}</span>
+                                <span>{`${form.endTime}`}</span>
+                            </div>
+                            <DialLinear color={selectedColor} updateForm={updateForm} />
+                        </div> */}
                     </div>
                     <div className="grid grid-cols-6 gap-2 px-2">
                         {Object.entries(palette).map(([key, color]) => (
                             <div
                                 key={key}
-                                className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full dark:saturate-70"
+                                className="m flex h-6 w-6 cursor-pointer items-center justify-center rounded-full dark:saturate-70"
                                 style={{ backgroundColor: color.background }}
                                 onClick={() => updateForm('colorId', key)}
                             >

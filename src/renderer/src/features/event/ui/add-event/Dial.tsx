@@ -13,6 +13,7 @@ export function Dial({ updateForm, color }: DialProps) {
     const pos1 = angleToPosition(angle1)
     const pos2 = angleToPosition(angle2)
 
+    // Thumb 드래그 핸들러
     const handleDrag = (thumbNum, e) => {
         e.preventDefault()
         const svg = svgRef.current
@@ -26,21 +27,19 @@ export function Dial({ updateForm, color }: DialProps) {
         let angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90
         if (angle < 0) angle += 360
         angle = Math.round(angle / 1.25) * 1.25 // 약 5분 단위
-        if (angle == 360) angle = 0
-        console.log(angle)
+
         if (thumbNum === 1) {
             // 시작 시간 Thumb
             setAngle1(angle)
-            updateForm('startTime', angleToTime(angle).hour + ':' + angleToTime(angle).minute.toString().padStart(2, '0'))
+            updateForm('startTime', angleToTime(angle).hour.toString().padStart(2, '0') + ':' + angleToTime(angle).minute.toString().padStart(2, '0'))
 
             // 종료 시간이 시작 시간보다 작으면 같이 올림
             if (angle2 < angle) {
                 setAngle2(angle)
-                updateForm('endTime', angleToTime(angle).hour + ':' + angleToTime(angle).minute.toString().padStart(2, '0'))
+                updateForm('endTime', angleToTime(angle).hour.toString().padStart(2, '0') + ':' + angleToTime(angle).minute.toString().padStart(2, '0'))
             }
         } else {
             // 종료 시간 Thumb
-            if (angle > 358.75) angle = 358.75
             if (angle < angle1) angle = angle1 // 시작 시간 이하로 못 내림
             setAngle2(angle)
             updateForm('endTime', angleToTime(angle).hour + ':' + angleToTime(angle).minute.toString().padStart(2, '0'))
@@ -139,7 +138,49 @@ export function Dial({ updateForm, color }: DialProps) {
             <path d={arcPath} stroke={color} strokeWidth={ARC_STROKE} fill="none" strokeLinecap="round" className="saturate-70" />
 
             {/* {selectedMarks} */}
-
+            {/* Thumb 1 */}
+            <g>
+                <circle
+                    cx={pos1.x}
+                    cy={pos1.y}
+                    r={THUMB_RADIUS}
+                    className="fill-[#fff] stroke-[#E6E8EC] dark:fill-[#424242] dark:stroke-zinc-700"
+                    strokeWidth={3}
+                    style={{
+                        filter: 'drop-shadow(0px 2px 8px rgba(106,145,224,0.18))',
+                        cursor: 'pointer'
+                    }}
+                    onPointerDown={(_e) => {
+                        const moveListener = (moveEvent) => handleDrag(1, moveEvent)
+                        const upListener = () => {
+                            window.removeEventListener('pointermove', moveListener)
+                            window.removeEventListener('pointerup', upListener)
+                        }
+                        window.addEventListener('pointermove', moveListener)
+                        window.addEventListener('pointerup', upListener)
+                    }}
+                />
+                <svg
+                    x={pos1.x - 8}
+                    y={pos1.y - 8}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style={{ pointerEvents: 'none' }}
+                >
+                    <circle cx="12" cy="13" r="8" />
+                    <path d="M12 9v4l2 2" />
+                    <path d="M5 3 2 6" />
+                    <path d="m22 6-3-3" />
+                    <path d="M6.38 18.7 4 21" />
+                    <path d="M17.64 18.67 20 21" />
+                </svg>
+            </g>
             <g>
                 {/* Thumb 2 */}
                 <circle
@@ -153,7 +194,7 @@ export function Dial({ updateForm, color }: DialProps) {
                         filter: 'drop-shadow(0px 2px 8px rgba(106,145,224,0.18))',
                         cursor: 'pointer'
                     }}
-                    onPointerDown={(e) => {
+                    onPointerDown={(_e) => {
                         const moveListener = (moveEvent) => handleDrag(2, moveEvent)
                         const upListener = () => {
                             window.removeEventListener('pointermove', moveListener)
@@ -183,49 +224,6 @@ export function Dial({ updateForm, color }: DialProps) {
                     <path d="M6.26 18.67 4 21" />
                     <path d="m2 2 20 20" />
                     <path d="M4 4 2 6" />
-                </svg>
-            </g>
-            {/* Thumb 1 */}
-            <g>
-                <circle
-                    cx={pos1.x}
-                    cy={pos1.y}
-                    r={THUMB_RADIUS}
-                    className="fill-[#fff] stroke-[#E6E8EC] dark:fill-[#424242] dark:stroke-zinc-700"
-                    strokeWidth={3}
-                    style={{
-                        filter: 'drop-shadow(0px 2px 8px rgba(106,145,224,0.18))',
-                        cursor: 'pointer'
-                    }}
-                    onPointerDown={(e) => {
-                        const moveListener = (moveEvent) => handleDrag(1, moveEvent)
-                        const upListener = () => {
-                            window.removeEventListener('pointermove', moveListener)
-                            window.removeEventListener('pointerup', upListener)
-                        }
-                        window.addEventListener('pointermove', moveListener)
-                        window.addEventListener('pointerup', upListener)
-                    }}
-                />
-                <svg
-                    x={pos1.x - 8}
-                    y={pos1.y - 8}
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    style={{ pointerEvents: 'none' }}
-                >
-                    <circle cx="12" cy="13" r="8" />
-                    <path d="M12 9v4l2 2" />
-                    <path d="M5 3 2 6" />
-                    <path d="m22 6-3-3" />
-                    <path d="M6.38 18.7 4 21" />
-                    <path d="M17.64 18.67 20 21" />
                 </svg>
             </g>
         </svg>
