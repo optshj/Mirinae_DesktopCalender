@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import { Check } from 'lucide-react'
-import { useAddEvent } from './AddEventForm.mutation'
 import { getColorById, getPalette } from '../../lib/getColor'
 
 import HangulInput from '@/shared/ui/HangulInput'
 import { toast } from 'sonner'
 import { Dial } from '../Dial'
+import { useEditEvent } from './EditEventForm.mutation'
+import { EventItemWithColor } from '@/shared/types/EventTypes'
+import { ISO8601toSimpleTime } from '@/shared/lib/dateFunction'
 
 interface FormState {
     summary: string
@@ -14,27 +16,30 @@ interface FormState {
     startTime: string
     endTime: string
 }
-export function AddEventForm({ date }: { date: Date }) {
+interface EditEventForm {
+    event: EventItemWithColor
+    deleteButton: React.ReactNode
+}
+export function EditEventForm({ event, deleteButton }: EditEventForm) {
     const [showForm, setShowForm] = useState(false)
     const [form, setForm] = useState<FormState>({
-        summary: '',
-        colorId: '1',
-        startTime: '08:00',
-        endTime: '10:00'
+        summary: event.summary,
+        colorId: event.colorId,
+        startTime: ISO8601toSimpleTime(event.start.dateTime),
+        endTime: ISO8601toSimpleTime(event.end.dateTime)
     })
     const updateForm = (key: keyof FormState, value: string) => setForm((prev) => ({ ...prev, [key]: value }))
-    const resetForm = () => setForm({ summary: '', colorId: '1', startTime: '08:00', endTime: '10:00' })
 
     const selectedColor = getColorById(form.colorId).background
     const palette = getPalette()
-    const { addEvent } = useAddEvent()
+    const date = new Date(event.start.dateTime)
+    const { editEvent } = useEditEvent()
 
     const handleSubmit = () => {
         if (performSubmit()) return
         setShowForm(false)
-        resetForm()
-        toast.success(`"${form.summary}" 일정이 추가되었습니다`, {
-            description: `${date.toLocaleDateString()} ${form.startTime} - ${form.endTime}에 일정이 추가되었습니다.`
+        toast.success(`"${form.summary}" 일정이 수정되었습니다`, {
+            description: `${date.toLocaleDateString()} ${form.startTime} - ${form.endTime}에 일정이 수정되었습니다.`
         })
     }
     const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,24 +52,18 @@ export function AddEventForm({ date }: { date: Date }) {
             toast.warning('일정 제목을 입력해주세요')
             return true
         }
-        addEvent({ date, ...form })
+        editEvent({ eventId: event.id, date, ...form })
         return false
     }
+    const openForm = () => {
+        if (event.organizer?.displayName !== '대한민국의 휴일') setShowForm(true)
+    }
 
-    // crtl + enter키로 제출 또는 폼을 여는 리스너
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (document.getElementById('edit-event-form')) {
-                //수정폼이 열려있으면 안열리게
-                return
-            }
             if (e.ctrlKey && e.key === 'Enter') {
                 e.preventDefault()
-                if (showForm) {
-                    handleSubmit()
-                } else {
-                    setShowForm(true)
-                }
+                if (showForm) handleSubmit()
             }
         }
         window.addEventListener('keydown', handleKeyDown)
@@ -74,7 +73,7 @@ export function AddEventForm({ date }: { date: Date }) {
     return (
         <>
             {showForm ? (
-                <form onSubmit={onFormSubmit} className="flex flex-col gap-4 rounded-xl border p-4 dark:saturate-70" style={{ borderColor: selectedColor }}>
+                <form id="edit-event-form" onSubmit={onFormSubmit} className="flex flex-col gap-4 rounded-xl border p-4 dark:saturate-70" style={{ borderColor: selectedColor }}>
                     <div className="flex flex-col gap-1">
                         <label htmlFor="summary" style={{ color: selectedColor }}>
                             일정 제목
@@ -103,7 +102,7 @@ export function AddEventForm({ date }: { date: Date }) {
                                     <span>{`${form.endTime}`}</span>
                                 </div>
                             </div>
-                            <Dial updateForm={updateForm} color={selectedColor} />
+                            <Dial updateForm={updateForm} color={selectedColor} defaultTime={[form.startTime, form.endTime]} />
                         </div>
                     </div>
                     <div className="grid grid-cols-6 gap-2 px-2">
@@ -123,20 +122,34 @@ export function AddEventForm({ date }: { date: Date }) {
                             취소
                         </button>
                         <button type="submit" className="rounded-lg px-6 py-1.5 font-semibold whitespace-nowrap text-white dark:saturate-70" style={{ backgroundColor: selectedColor }}>
-                            추가
+                            수정
                         </button>
                     </div>
                 </form>
             ) : (
-                <button
-                    className="text-secondary mt-2 w-full rounded-xl border-2 border-dashed py-3 text-center"
-                    onClick={() => {
-                        setShowForm(true)
-                        resetForm()
+                // 아이템 렌더링
+                <div
+                    key={event.id}
+                    className="relative flex items-center justify-between rounded-xl p-3 dark:saturate-70"
+                    style={{
+                        backgroundColor: `${event.color.background}30`
                     }}
+                    onDoubleClick={() => openForm()}
                 >
-                    + 일정 추가
-                </button>
+                    <div
+                        className="h-full w-2 rounded-xl"
+                        style={{
+                            backgroundColor: event.color.background
+                        }}
+                    />
+                    <div className="text-primary flex-1 pl-4">
+                        <span className="font-semibold">{event.summary}</span>
+                        <div className="mt-1 text-xs">
+                            {event.start.dateTime ? `${new Date(event.start.dateTime).toLocaleString()} ~ ${new Date(event.end.dateTime).toLocaleString()}` : `${event.start.date} ~ ${event.end.date}`}
+                        </div>
+                    </div>
+                    {event.organizer?.displayName === '대한민국의 휴일' ? null : deleteButton}
+                </div>
             )}
         </>
     )

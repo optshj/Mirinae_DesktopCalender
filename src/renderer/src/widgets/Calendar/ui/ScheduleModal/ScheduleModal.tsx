@@ -1,7 +1,4 @@
-import { useCalendarItems } from '@/features/event'
-import { AddEventForm, DeleteEventButton } from '@/features/event'
-
-import { ModalEventList } from '@/entities/event'
+import { AddEventForm, DeleteEventButton, EditEventForm, useCalendarItems } from '@/features/event'
 
 import { isSameDay } from '@/shared/lib/dateFunction'
 import { DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
@@ -20,7 +17,7 @@ export function ScheduleModal({ date }: { date: Date }) {
                 </DialogTitle>
             </DialogHeader>
             {events.map((event) => (
-                <ModalEventList key={event.id} event={event} deleteButton={<DeleteEventButton eventId={event.id} />} />
+                <EditEventForm event={event} deleteButton={<DeleteEventButton eventId={event.id} />} />
             ))}
             <AddEventForm date={date} />
         </DialogContent>

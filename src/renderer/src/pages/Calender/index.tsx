@@ -5,6 +5,7 @@ import { useFlipCalendar } from '@/features/flip'
 import { Header } from '@/widgets/Header'
 import { Footer } from '@/widgets/Footer'
 import { CalendarGrid } from '@/widgets/Calendar'
+import { PatchNoteModal } from '@/entities/patchNote'
 
 export function Calendar() {
     const { days, month, displayMonth, year, handlePrevMonth, handleNextMonth } = useDate()
@@ -17,6 +18,7 @@ export function Calendar() {
                 <CalendarGrid days={days} month={month} />
                 <Footer />
             </div>
+            <PatchNoteModal />
         </div>
     )
 }

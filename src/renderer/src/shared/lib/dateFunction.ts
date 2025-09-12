@@ -2,6 +2,15 @@ export function isSameDay(a: Date, b: Date) {
     return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
 }
 
+//2025-09-17T18:00:00+09:00 -> 18:00
+export function ISO8601toSimpleTime(isoString) {
+    const date = new Date(isoString)
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const paddedMinutes = String(minutes).padStart(2, '0')
+    return `${hours}:${paddedMinutes}`
+}
+
 // 예시: YYYY-MM-DD HH:mm 형식
 export function formatDate(date: string) {
     const d = new Date(date)

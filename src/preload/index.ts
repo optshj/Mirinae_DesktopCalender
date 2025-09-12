@@ -14,7 +14,9 @@ export interface Api {
     setOpacity: (opacity: number) => void
     getInitialOpacity: () => Promise<number>
     removeListeners: () => void
+    onShowPatchNotes: (callback: () => void) => () => void
 }
+
 const api = {
     startGoogleOauth: () => ipcRenderer.send('start-google-oauth'),
 
@@ -35,18 +37,15 @@ const api = {
     quitApp: () => ipcRenderer.send('quit-app'),
     setOpacity: (opacity: number) => ipcRenderer.send('set-opacity', opacity),
     getInitialOpacity: () => ipcRenderer.invoke('get-initial-opacity'),
-
+    onShowPatchNotes: (callback) => {
+        const listener = (_event, ...args) => callback(...args)
+        ipcRenderer.on('show-patch-notes', listener)
+        return () => {
+            ipcRenderer.removeListener('show-patch-notes', listener)
+        }
+    },
     removeListeners: () => {
-        ipcRenderer.removeAllListeners('google-oauth-token')
-        ipcRenderer.removeAllListeners('google-oauth-error')
-        ipcRenderer.removeAllListeners('try-auto-login')
-        ipcRenderer.removeAllListeners('logout-google-oauth')
-        ipcRenderer.removeAllListeners('safe-reload')
-        ipcRenderer.removeAllListeners('start-dragging')
-        ipcRenderer.removeAllListeners('stop-dragging')
-        ipcRenderer.removeAllListeners('quit-app')
-        ipcRenderer.removeAllListeners('set-opacity')
-        ipcRenderer.removeAllListeners('get-initial-opacity')
+        ipcRenderer.removeAllListeners()
     }
 }
 

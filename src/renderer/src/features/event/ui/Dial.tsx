@@ -1,14 +1,15 @@
 import { JSX, useRef, useState } from 'react'
-import { angleToPosition, angleToTime, CENTER, describeArc, RADIUS, THUMB_RADIUS } from '../../lib/dialFuction'
+import { angleToPosition, angleToTime, timeToAngle, CENTER, describeArc, RADIUS, THUMB_RADIUS } from '../lib/dialFuction'
 
 interface DialProps {
     updateForm: (key: keyof { startTime: string; endTime: string }, value: string) => void
     color: string
+    defaultTime?: [string, string]
 }
-export function Dial({ updateForm, color }: DialProps) {
+export function Dial({ updateForm, color, defaultTime = ['08:00', '10:00'] }: DialProps) {
     const svgRef = useRef<SVGSVGElement>(null)
-    const [angle1, setAngle1] = useState(120) // 시작시간
-    const [angle2, setAngle2] = useState(150) // 종료시간
+    const [angle1, setAngle1] = useState(timeToAngle(defaultTime[0]))
+    const [angle2, setAngle2] = useState(timeToAngle(defaultTime[1]))
 
     const pos1 = angleToPosition(angle1)
     const pos2 = angleToPosition(angle2)
@@ -17,7 +18,7 @@ export function Dial({ updateForm, color }: DialProps) {
     const handleDrag = (thumbNum, e) => {
         e.preventDefault()
         const svg = svgRef.current
-        if (!svg) return // 안전 체크
+        if (!svg) return
         const pt = svg.createSVGPoint()
         pt.x = e.clientX
         pt.y = e.clientY
@@ -26,7 +27,7 @@ export function Dial({ updateForm, color }: DialProps) {
         const dy = cursorpt.y - CENTER
         let angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90
         if (angle < 0) angle += 360
-        angle = Math.round(angle / 1.25) * 1.25 // 약 5분 단위
+        angle = Math.round(angle / 1.25) * 1.25 // 약 5분 단위 절삭
 
         if (thumbNum === 1) {
             // 시작 시간 Thumb
@@ -139,7 +140,7 @@ export function Dial({ updateForm, color }: DialProps) {
 
             {/* {selectedMarks} */}
             {/* Thumb 1 */}
-            <g>
+            <g data-testid="start-thumb">
                 <circle
                     cx={pos1.x}
                     cy={pos1.y}
@@ -181,14 +182,13 @@ export function Dial({ updateForm, color }: DialProps) {
                     <path d="M17.64 18.67 20 21" />
                 </svg>
             </g>
-            <g>
+            <g data-testid="end-thumb">
                 {/* Thumb 2 */}
                 <circle
                     cx={pos2.x}
                     cy={pos2.y}
                     r={THUMB_RADIUS}
-                    fill="#fff"
-                    stroke="#E6E8EC"
+                    className="fill-[#fff] stroke-[#E6E8EC] dark:fill-[#424242] dark:stroke-zinc-700"
                     strokeWidth={3}
                     style={{
                         filter: 'drop-shadow(0px 2px 8px rgba(106,145,224,0.18))',

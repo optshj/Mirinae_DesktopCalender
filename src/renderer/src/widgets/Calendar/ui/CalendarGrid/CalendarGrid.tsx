@@ -50,7 +50,9 @@ export function CalendarGrid({ days, month }: CalendarGridProps) {
                                     onDoubleClick={() => handleDateDoubleClick(date)}
                                 >
                                     <div className={`px-1 font-semibold ${isCurrentMonth ? 'text-primary' : 'text-secondary'} `}>
-                                        <div className={`${isToday ? 'bg-main-color text-[#f3f4f6]' : ''} flex h-6 w-6 items-center justify-center rounded-full`}>{date.getDate()}</div>
+                                        <div className={`${isToday ? 'bg-main-color text-[#f3f4f6]' : ''} flex h-6 w-6 items-center justify-center rounded-full dark:saturate-70`}>
+                                            {date.getDate()}
+                                        </div>
                                     </div>
                                     <EventList items={events} />
                                 </div>

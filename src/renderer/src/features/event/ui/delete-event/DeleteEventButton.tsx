@@ -1,16 +1,17 @@
 import { IoCloseOutline } from 'react-icons/io5'
-import { useEditEvent } from '../../api/useEditEvent'
+import { useDeleteEvent } from './DeleteEventButton.mutation'
 import { toast } from 'sonner'
 
 interface DeleteEventButtonProps {
     eventId: string
 }
 export function DeleteEventButton({ eventId }: DeleteEventButtonProps) {
-    const { deleteEvent } = useEditEvent()
+    const { deleteEvent } = useDeleteEvent()
 
     return (
         <button
-            onDoubleClick={() => {
+            onDoubleClick={(e) => {
+                e.stopPropagation()
                 deleteEvent(eventId)
                 toast.success('일정이 삭제되었습니다.')
             }}

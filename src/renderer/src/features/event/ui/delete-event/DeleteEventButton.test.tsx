@@ -5,8 +5,8 @@ import { DeleteEventButton } from './DeleteEventButton'
 
 const mockDeleteEvent = vi.fn()
 
-vi.mock('../../api/useEditEvent', () => ({
-    useEditEvent: () => ({
+vi.mock('./DeleteEventButton.mutation', () => ({
+    useDeleteEvent: () => ({
         deleteEvent: (id) => mockDeleteEvent(id)
     })
 }))

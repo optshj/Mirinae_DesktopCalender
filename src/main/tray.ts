@@ -2,6 +2,7 @@ import { app, Menu, nativeImage, Tray } from 'electron'
 import { attach, detach } from 'electron-as-wallpaper'
 import { join } from 'path'
 import { mainWindow } from '.'
+import { store } from './store'
 
 export function initTray() {
     const iconPath = app.isPackaged ? join(process.resourcesPath, 'resources/icon.png') : join(__dirname, '../../resources/icon.png')
@@ -30,6 +31,15 @@ export function initTray() {
                     }
                 }
             ]
+        },
+        {
+            label: '위치 초기화',
+            click: (): void => {
+                store.set('window-bounds', { width: 1200, height: 800, x: 0, y: 0 })
+                store.set('window-opacity', 1)
+                mainWindow.setOpacity(1)
+                mainWindow.setBounds({ width: 1200, height: 800, x: 0, y: 0 })
+            }
         },
         { type: 'separator' },
         {

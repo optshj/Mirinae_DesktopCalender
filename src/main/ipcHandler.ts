@@ -1,5 +1,5 @@
 import { ipcMain, app } from 'electron'
-import { attach, detach, reset } from 'electron-as-wallpaper'
+import { attach, detach } from 'electron-as-wallpaper'
 import { mainWindow } from '.'
 import { tryAutoLogin, logoutGoogleOAuth, startGoogleOAuth } from './oauth'
 import { store } from './store'
@@ -11,7 +11,6 @@ export const registerIPCHandlers = () => {
 
     ipcMain.on('quit-app', () => {
         app.quit()
-        reset()
     })
     ipcMain.on('start-dragging', () => {
         detach(mainWindow)

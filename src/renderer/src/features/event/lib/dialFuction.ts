@@ -9,6 +9,11 @@ export function angleToPosition(angle) {
         y: CENTER + RADIUS * Math.sin(rad)
     }
 }
+export function timeToAngle(timeString) {
+    const [hours, minutes] = timeString.split(':').map(Number)
+    const angle = hours * 15 + minutes * 0.25
+    return angle % 360
+}
 
 export function angleToTime(angle) {
     let hour = Math.floor(angle / 15) % 24

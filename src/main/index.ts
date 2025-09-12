@@ -7,6 +7,7 @@ import { initTray } from './tray'
 import { initAutoUpdater } from './autoUpdate'
 import { registerIPCHandlers } from './ipcHandler'
 import { store } from './store'
+import { checkVersionAndShowPatchNotes } from './versionCheck'
 
 const SERVICE_NAME = 'Mirinae'
 
@@ -69,6 +70,7 @@ app.whenReady().then(() => {
     initTray()
     initAutoUpdater()
     registerIPCHandlers()
+    checkVersionAndShowPatchNotes()
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()

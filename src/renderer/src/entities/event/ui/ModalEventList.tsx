@@ -4,7 +4,6 @@ interface ModalEventListProps {
     event: EventItemWithColor
     deleteButton: React.ReactNode
 }
-
 export function ModalEventList({ event, deleteButton }: ModalEventListProps) {
     return (
         <div
