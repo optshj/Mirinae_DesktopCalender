@@ -1,5 +1,7 @@
 # 📅 미리내 (Mirinae) - 데스크톱 캘린더 위젯
 
+[미리내 설치하기 링크](https://www.mirinaecalendar.store/)
+
 데스크톱 캘린더 위젯, 미리내입니다.
 ![alt text](2025-08-19143059-ezgif.com-video-to-gif-converter.gif)
 
