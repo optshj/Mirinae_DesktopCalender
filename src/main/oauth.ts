@@ -11,7 +11,7 @@ const ACCOUNT_NAME = 'google-refresh-token'
 const CLIENT_ID = process.env.VITE_CLIENT_ID
 const CLIENT_SECRET = process.env.VITE_CLIENT_SECRET
 const REDIRECT_URI = 'http://localhost:5858/callback'
-const SCOPES = 'https://www.googleapis.com/auth/calendar'
+const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events.owned'
 
 const generatePKCE = () => {
     const codeVerifier = crypto.randomBytes(32).toString('hex')
