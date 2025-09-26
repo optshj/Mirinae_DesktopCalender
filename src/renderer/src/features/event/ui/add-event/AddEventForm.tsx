@@ -7,6 +7,7 @@ import { getColorById, getPalette } from '../../lib/getColor'
 import HangulInput from '@/shared/ui/HangulInput'
 import { toast } from 'sonner'
 import { Dial } from '../Dial'
+import { trackEvent } from '@aptabase/electron/renderer'
 
 interface FormState {
     summary: string
@@ -33,6 +34,7 @@ export function AddEventForm({ date }: { date: Date }) {
         if (performSubmit()) return
         setShowForm(false)
         resetForm()
+        trackEvent('AddEvent')
         toast.success(`"${form.summary}" 일정이 추가되었습니다`, {
             description: `${date.toLocaleDateString()} ${form.startTime} - ${form.endTime}에 일정이 추가되었습니다.`
         })

@@ -1,6 +1,14 @@
+import { trackEvent } from '@aptabase/electron/renderer'
+
 export function QuitAppButton() {
     return (
-        <div onClick={() => window.api.quitApp()} className="text-red-600">
+        <div
+            onClick={() => {
+                window.api.quitApp()
+                trackEvent('QuitAppButton')
+            }}
+            className="text-red-600"
+        >
             앱 종료
         </div>
     )

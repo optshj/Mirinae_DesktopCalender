@@ -9,6 +9,7 @@ import { Dial } from '../Dial'
 import { useEditEvent } from './EditEventForm.mutation'
 import { EventItemWithColor } from '@/shared/types/EventTypes'
 import { ISO8601toSimpleTime } from '@/shared/lib/dateFunction'
+import { trackEvent } from '@aptabase/electron/renderer'
 
 interface FormState {
     summary: string
@@ -38,6 +39,7 @@ export function EditEventForm({ event, deleteButton }: EditEventForm) {
     const handleSubmit = () => {
         if (performSubmit()) return
         setShowForm(false)
+        trackEvent('EditEvent')
         toast.success(`"${form.summary}" 일정이 수정되었습니다`, {
             description: `${date.toLocaleDateString()} ${form.startTime} - ${form.endTime}에 일정이 수정되었습니다.`
         })

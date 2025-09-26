@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { MdDarkMode, MdLightMode } from 'react-icons/md'
+import { trackEvent } from '@aptabase/electron/renderer'
 
 export function DarkModeButton() {
     const [darkMode, setDarkMode] = useState(false)
@@ -18,6 +19,7 @@ export function DarkModeButton() {
 
     const toggleDarkMode = () => {
         setDarkMode((prev) => {
+            trackEvent('ChangeDarkMode')
             const newDark = !prev
             if (newDark) {
                 document.documentElement.classList.add('dark')

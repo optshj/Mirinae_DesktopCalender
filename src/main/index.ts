@@ -8,6 +8,7 @@ import { initAutoUpdater } from './autoUpdate'
 import { registerIPCHandlers } from './ipcHandler'
 import { store } from './store'
 import { checkVersionAndShowPatchNotes } from './versionCheck'
+import { initialize } from '@aptabase/electron/main'
 
 const SERVICE_NAME = 'Mirinae'
 
@@ -18,6 +19,7 @@ const myAppLauncher = new AutoLaunch({
     path: process.execPath
 })
 myAppLauncher.enable()
+initialize('A-US-3842104393')
 
 function createWindow(): void {
     const { height: screenHeight } = screen.getPrimaryDisplay().workAreaSize

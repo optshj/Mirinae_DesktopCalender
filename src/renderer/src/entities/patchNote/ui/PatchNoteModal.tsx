@@ -15,10 +15,7 @@ export function PatchNoteModal() {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>새롭게 변경된 기능</DialogTitle>
-                    <DialogDescription>
-                        1. 자잘한 오류들이 수정되었습니다.
-                        <br />그 외에는 달라진게 없어요!
-                    </DialogDescription>
+                    <DialogDescription>1. 화면 조절 시 보이던 아래 여백을 없앴어요</DialogDescription>
                 </DialogHeader>
             </DialogContent>
         </Dialog>

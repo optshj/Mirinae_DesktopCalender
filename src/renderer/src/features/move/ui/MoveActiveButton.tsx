@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/shared/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog'
 import { MoveIcon } from 'lucide-react'
+import { trackEvent } from '@aptabase/electron/renderer'
 
 export function MoveActiveButton() {
     const [isDrag, setIsDrag] = useState(false)
@@ -13,6 +14,7 @@ export function MoveActiveButton() {
         } else {
             window.api.startDragging()
             document.documentElement.classList.add('resizable')
+            trackEvent('MoveActiveButton')
         }
     }
 
