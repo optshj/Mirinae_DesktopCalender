@@ -46,8 +46,8 @@ function createWindow(): void {
     mainWindow.on('ready-to-show', () => {
         if (!(mainWindow as any)._isAttached) {
             attach(mainWindow, {
-                forwardMouseInput: true,
-                forwardKeyboardInput: true
+                forwardMouseInput: false,
+                forwardKeyboardInput: false
             })
             ;(mainWindow as any)._isAttached = true
         }
