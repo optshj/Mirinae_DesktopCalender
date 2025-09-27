@@ -18,9 +18,21 @@ export const registerIPCHandlers = () => {
     })
     ipcMain.on('stop-dragging', () => {
         mainWindow.setResizable(false)
-        attach(mainWindow, { forwardKeyboardInput: true, forwardMouseInput: true })
+        attach(mainWindow, { forwardKeyboardInput: false, forwardMouseInput: false })
         const { width, height, x, y } = mainWindow.getBounds()
         store.set('window-bounds', { width, height, x, y })
+    })
+    ipcMain.on('enable-input-forwarding', () => {
+        if ((mainWindow as any)._isAttached) {
+            detach(mainWindow)
+            attach(mainWindow, { forwardKeyboardInput: true, forwardMouseInput: true })
+        }
+    })
+    ipcMain.on('disable-input-forwarding', () => {
+        if ((mainWindow as any)._isAttached) {
+            detach(mainWindow)
+            attach(mainWindow, { forwardKeyboardInput: false, forwardMouseInput: false })
+        }
     })
     ipcMain.on('set-opacity', (_, newOpacity) => {
         mainWindow.setOpacity(newOpacity)

@@ -56,8 +56,8 @@ export function initTray() {
     })
     contextMenu.on('menu-will-close', () => {
         attach(mainWindow, {
-            forwardKeyboardInput: true,
-            forwardMouseInput: true
+            forwardKeyboardInput: false,
+            forwardMouseInput: false
         })
     })
 }

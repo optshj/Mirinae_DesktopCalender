@@ -11,6 +11,8 @@ export interface Api {
     startDragging: () => void
     stopDragging: () => void
     quitApp: () => void
+    enableInputForwarding: () => void
+    disableInputForwarding: () => void
     setOpacity: (opacity: number) => void
     getInitialOpacity: () => Promise<number>
     removeListeners: () => void
@@ -35,6 +37,8 @@ const api = {
     startDragging: () => ipcRenderer.send('start-dragging'),
     stopDragging: () => ipcRenderer.send('stop-dragging'),
     quitApp: () => ipcRenderer.send('quit-app'),
+    enableInputForwarding: () => ipcRenderer.send('enable-input-forwarding'),
+    disableInputForwarding: () => ipcRenderer.send('disable-input-forwarding'),
     setOpacity: (opacity: number) => ipcRenderer.send('set-opacity', opacity),
     getInitialOpacity: () => ipcRenderer.invoke('get-initial-opacity'),
     onShowPatchNotes: (callback) => {
